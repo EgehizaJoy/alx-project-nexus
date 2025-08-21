@@ -1,0 +1,288 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #e6f7ff, #d6eeff, #c1e3ff);
+            color: #4a5a7a;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .demo-notice {
+            text-align: center;
+            color: #4a8fe7;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #c1e3ff;
+        }
+        
+        .payment-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(162, 210, 255, 0.2);
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid #c1e3ff;
+        }
+        
+        .payment-header {
+            background: linear-gradient(45deg, #a1c4fd, #b5deff);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .payment-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            display: inline-block;
+        }
+        
+        .remember-checkbox {
+            float: right;
+            margin-top: 5px;
+        }
+        
+        .remember-checkbox label {
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .remember-checkbox input {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        
+        .payment-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #4a8fe7;
+            font-size: 1.1rem;
+        }
+        
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #c1e3ff;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .form-control:focus {
+            border-color: #4a8fe7;
+            box-shadow: 0 0 0 2px rgba(74, 143, 231, 0.2);
+            outline: none;
+        }
+        
+        .input-group-addon {
+            position: absolute;
+            right: 15px;
+            color: #4a8fe7;
+            font-size: 1.2rem;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .col-xs-4 {
+            padding: 0 10px;
+            flex: 0 0 33.333%;
+            max-width: 33.333%;
+        }
+        
+        .payment-summary {
+            background: #e6f7ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #c1e3ff;
+        }
+        
+        .payment-summary li {
+            list-style: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #c1e3ff;
+        }
+        
+        .payment-summary li:last-child {
+            border-bottom: none;
+        }
+        
+        .badge {
+            background: linear-gradient(45deg, #4a8fe7, #6ba8f0);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+        
+        .pay-button {
+            background: linear-gradient(45deg, #4a8fe7, #6ba8f0);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        
+        .pay-button:hover {
+            background: linear-gradient(45deg, #3a7ed7, #5b98e0);
+        }
+        
+        .pay-button i {
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .col-xs-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .payment-header {
+                padding: 15px;
+            }
+            
+            .payment-title {
+                font-size: 1.5rem;
+            }
+            
+            .payment-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<div class="container">
+    <div class="demo-notice">
+        <i class="fas fa-info-circle"></i> This is a demonstration payment interface
+    </div>
+    
+    <div class="payment-container">
+        <div class="payment-header">
+            <h3 class="payment-title">
+                Payment Details
+            </h3>
+            <div class="checkbox remember-checkbox">
+                <label>
+                    <input type="checkbox" />
+                    Remember details
+                </label>
+            </div>
+        </div>
+        <div class="payment-body">
+            <form role="form" method="post">
+                <div class="form-group">
+                    <label for="cardNumber">
+                        CARD NUMBER</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx"
+                            required autofocus />
+                        <span class="input-group-addon"><i class="fas fa-credit-card"></i></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 col-md-4">
+                        <div class="form-group">
+                            <label for="expityMonth">
+                                MONTH</label>
+                            <input type="text" class="form-control" id="expityMonth" placeholder="MM" required />
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-md-4">
+                        <div class="form-group">
+                            <label for="expityYear">
+                                YEAR</label>
+                            <input type="text" class="form-control" id="expityYear" placeholder="YY" required />
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-md-4">
+                        <div class="form-group">
+                            <label for="cvCode">
+                                CV CODE</label>
+                            <input type="password" class="form-control" id="cvCode" placeholder="CV" required />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <ul class="payment-summary">
+        <li class="active">
+            <span>Total Payment</span>
+            <span class="badge">{{total}}</span>
+        </li>
+    </ul>
+    
+    <a href="/payment-success" class="pay-button" role="button">
+        <i class="fas fa-lock"></i> Complete Payment
+    </a>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Simplified JavaScript - removed all animations and emoji effects
+    });
+</script>
+
+{% endblock content %}

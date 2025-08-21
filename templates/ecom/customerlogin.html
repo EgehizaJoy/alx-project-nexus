@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Sweet Shop Login</title>
+    <style media="screen">
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Nunito', sans-serif;
+      }
+      
+      body {
+        background: linear-gradient(135deg, #bbd0ff, #a2d2ff);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        overflow-x: hidden;
+      }
+      
+      /* Floating elements */
+      .floating {
+        position: absolute;
+        z-index: 0;
+        opacity: 0.7;
+        animation: float 8s infinite ease-in-out;
+      }
+      
+      .floating:nth-child(1) {
+        top: 10%;
+        left: 5%;
+        width: 60px;
+        height: 60px;
+        background: #a2d2ff;
+        border-radius: 50%;
+        animation-delay: 0s;
+      }
+      
+      .floating:nth-child(2) {
+        top: 20%;
+        right: 7%;
+        width: 40px;
+        height: 40px;
+        background: #8a9eff;
+        border-radius: 50%;
+        animation-delay: 1s;
+      }
+      
+      .floating:nth-child(3) {
+        bottom: 15%;
+        left: 8%;
+        width: 30px;
+        height: 30px;
+        background: #bbd0ff;
+        border-radius: 50%;
+        animation-delay: 2s;
+      }
+      
+      .floating:nth-child(4) {
+        bottom: 25%;
+        right: 10%;
+        width: 50px;
+        height: 50px;
+        background: #6a5acd;
+        border-radius: 50%;
+        opacity: 0.5;
+        animation-delay: 3s;
+      }
+      
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(10deg);
+        }
+      }
+      
+      .container {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+      
+      .box {
+        width: 100%;
+        padding: 40px 30px;
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+        border-radius: 25px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        border: 3px solid rgba(255, 255, 255, 0.7);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .box::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        background: linear-gradient(45deg, #a2d2ff, #8a9eff, #bbd0ff, #6a5acd);
+        z-index: -1;
+        border-radius: 30px;
+        animation: gradient 15s ease infinite;
+        background-size: 400% 400%;
+      }
+      
+      @keyframes gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      
+      .box h1 {
+        color: #6a5acd;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+      }
+      
+      .box input[type="text"],
+      .box input[type="password"] {
+        border: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: block;
+        margin: 25px auto;
+        text-align: center;
+        border: 3px dashed #a2d2ff;
+        padding: 15px 20px;
+        width: 80%;
+        max-width: 300px;
+        outline: none;
+        color: #6a5acd;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 10px rgba(162, 210, 255, 0.2);
+      }
+      
+      .box input[type="text"]:focus,
+      .box input[type="password"]:focus {
+        border: 3px solid #8a9eff;
+        box-shadow: 0 4px 15px rgba(138, 158, 255, 0.4);
+        transform: scale(1.02);
+      }
+      
+      .box input[type="text"]::placeholder,
+      .box input[type="password"]::placeholder {
+        color: #b0c4de;
+        font-weight: 500;
+      }
+      
+      .box input[type="submit"] {
+        border: 0;
+        background: linear-gradient(45deg, #8a9eff, #6a5acd);
+        display: block;
+        margin: 30px auto 20px;
+        text-align: center;
+        padding: 16px 50px;
+        outline: none;
+        color: white;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(138, 158, 255, 0.4);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .box input[type="submit"]:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(138, 158, 255, 0.6);
+        background: linear-gradient(45deg, #6a5acd, #8a9eff);
+      }
+      
+      .box input[type="submit"]:active {
+        transform: translateY(1px);
+      }
+      
+      .box input[type="submit"]::after {
+        content: "→";
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all 0.3s ease;
+      }
+      
+      .box input[type="submit"]:hover::after {
+        right: 15px;
+      }
+      
+      .forgot {
+        color: #6a5acd;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      
+      .forgot:hover {
+        color: #8a9eff;
+        transform: translateY(-2px);
+      }
+      
+      .forgot::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #8a9eff;
+        transition: width 0.3s ease;
+      }
+      
+      .forgot:hover::after {
+        width: 100%;
+      }
+      
+      .social-login {
+        margin-top: 30px;
+      }
+      
+      .social-login p {
+        color: #6a5acd;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+      
+      .social-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+      
+      .social-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .social-btn:hover {
+        transform: translateY(-5px) rotate(10deg);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+      }
+      
+      .fb { background: #8a9eff; }
+      .tw { background: #a2d2ff; }
+      .gg { background: #6a5acd; }
+      
+      .signup-link {
+        margin-top: 25px;
+        color: #6a5acd;
+        font-weight: 600;
+      }
+      
+      .signup-link a {
+        color: #8a9eff;
+        text-decoration: none;
+        font-weight: 800;
+        transition: all 0.3s ease;
+      }
+      
+      .signup-link a:hover {
+        text-decoration: underline;
+        color: #6a5acd;
+      }
+      
+      /* Footer styling */
+      .footer {
+        width: 100%;
+        text-align: center;
+        padding: 20px;
+        color: #6a5acd;
+        font-weight: 600;
+        margin-top: 30px;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .footer p {
+        margin: 5px 0;
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 600px) {
+        .box {
+          padding: 30px 20px;
+        }
+        
+        .box h1 {
+          font-size: 2rem;
+        }
+        
+        .box input[type="text"],
+        .box input[type="password"] {
+          width: 90%;
+          padding: 12px 15px;
+        }
+      }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body>
+    <!-- Floating decorative elements -->
+    <div class="floating"></div>
+    <div class="floating"></div>
+    <div class="floating"></div>
+    <div class="floating"></div>
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+           <form class="box" method="post">
+              {% csrf_token %}  <!-- Add this line -->
+              
+              <h1>Customer Login</h1>
+              
+              <!-- Username field -->
+              <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" placeholder="Username" autocomplete="off" required>
+              </div>
+              
+              <!-- Password field -->
+              <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+              </div>
+              
+              <input type="submit" value="Login">
+              
+              <a href="#" class="forgot">Forgot your password?</a>
+              
+              <div class="social-login">
+                <p>Or login with</p>
+                <div class="social-buttons">
+                  <a href="#" class="social-btn fb"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#" class="social-btn tw"><i class="fab fa-twitter"></i></a>
+                  <a href="#" class="social-btn gg"><i class="fab fa-google"></i></a>
+                </div>
+              </div>
+              
+              <div class="signup-link">
+                Don't have an account? <a href="#">Sign Up Now</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>Sweet Shop E-commerce</p>
+      <p>© 2023 All rights reserved</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,207 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  body {
+    background-color: #d8eefe;
+    font-family: Arial, sans-serif;
+  }
+
+  .banner {
+    width: 100%;
+    height: 250px;
+    background-image: url("{% static 'images/ecom-banner1.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    margin-bottom: 30px;
+  }
+
+  .products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* even spacing between cards */
+  }
+
+  .product-card {
+    background: white;
+    border-radius: 15px;
+    padding: 12px;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 250px; /* fixed compact size */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .product-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 8px;
+    color: #000;
+  }
+
+  .product-description {
+    font-size: 13px;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  .product-price {
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 8px;
+    color: #000;
+  }
+
+  .add-to-cart-btn {
+    background-color: #89c2d9;
+    border: none;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: auto;
+    align-self: start;
+    font-size: 13px;
+  }
+
+  .add-to-cart-btn:hover {
+    background-color: #468faf;
+  }
+
+  .product-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 8px;
+}
+</style>
+
+<div class="banner"></div>
+
+{% if products %}
+  <h3 style="text-align:center; color:#000;">{{ word }}</h3>
+  <br>
+  <div class="products-grid">
+    {% for p in products %}
+   <!--   <div class="product-card">
+        <img src="{% static p.product_image.url %}" alt="{{ p.name }}">
+        <div class="product-name">{{ p.name }}</div>
+        <div class="product-description">{{ p.description }}</div>
+        <div class="product-price">${{ p.price }}</div>
+        
+          <button class="add-to-cart-btn"  data-id="{{ p.id }}">
+            <i class="fa fa-shopping-cart"></i> Add to Cart
+          </button>
+      // <a href="{% url 'add-to-cart' p.id %}"> </a>
+      </div> -->
+     <!-- customer_home.html -->
+      <div class="product-card">
+          <!-- Make product image/name/description clickable -->
+          <a href="{% url 'product_detail' p.id %}" class="product-link">
+              <img src="{% static p.product_image.url %}" alt="{{ p.name }}">
+              <div class="product-name">{{ p.name }}</div>
+              <div class="product-description">{{ p.description }}</div>
+          </a>
+          
+          <div class="product-price">${{ p.price }}</div>
+          <button class="add-to-cart-btn" data-id="{{ p.id }}">
+              <i class="fa fa-shopping-cart"></i> Add to Cart
+          </button>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <h3 style="text-align:center; color:#000;">No Search Found</h3>
+{% endif %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".add-to-cart-btn").forEach(function(button) {
+        button.addEventListener("click", function() {
+            let productId = this.getAttribute('data-id');
+
+            fetch("{% url 'add-to-cart-ajax' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "product_id=" + productId
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network error');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Update cart count in the header
+                    const cartCountElements = document.querySelectorAll('.item-number');
+                    cartCountElements.forEach(el => {
+                        el.textContent = data.cart_count;
+                    });
+                    
+                    // Optional: Show a nice notification instead of alert
+                    showNotification(data.message);
+                } else {
+                    showNotification("Error: " + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification("Failed to add to cart. Please try again.", 'error');
+            });
+        });
+    });
+
+    // Optional: Better notification function
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `cart-notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+});
+</script>
+<!-- Banner 
+<div class="banner"></div>
+
+{% if products %}
+  <h3 style="text-align:center; color:#000;">{{ word }}</h3>
+  <br>
+  <div class="row">
+    {% for p in products %}
+      <div class="col-md-4 col-sm-6 col-12 product-col">
+        <div class="product-card">
+          <img src="{% static p.product_image.url %}" alt="{{ p.name }}">
+          <div class="product-name">{{ p.name }}</div>
+          <div class="product-description">{{ p.description }}</div>
+          <div class="product-price">${{ p.price }}</div>
+          <a href="{% url 'add-to-cart' p.id %}">
+            <button class="add-to-cart-btn">
+              <i class="fa fa-shopping-cart"></i> Add to Cart
+            </button>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <h3 style="text-align:center; color:#000;">No Search Found</h3>
+{% endif %} -->
+
+{% endblock content %}

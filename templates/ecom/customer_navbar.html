@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>🎀 Whimsical Shop</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+  <style>
+  :root {
+    --pastel-blue: #b5e8ff;
+    --pastel-pink: #ffd1dc;
+    --light-blue: #d9f0ff;
+    --light-pink: #ffe6ee;
+    --accent-blue: #8ccfff;
+    --accent-pink: #ffb6c1;
+    --text-dark: #5a5a7a;
+    --text-light: #ffffff;
+  }
+
+  body {
+    background: linear-gradient(135deg, var(--pastel-blue), var(--pastel-pink));
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-attachment: fixed;
+    background-size: 200% 200%;
+    animation: gradientBG 15s ease infinite;
+  }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  #navbar {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    color: var(--text-dark);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .row1 {
+    padding: 15px 0;
+  }
+
+  .row2 {
+    padding: 20px 0;
+    position: relative;
+  }
+
+  .navbar-input {
+    padding: 12px 20px;
+    border-radius: 25px 0 0 25px;
+    border: 2px solid var(--accent-pink);
+    outline: none;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    color: var(--text-dark);
+  }
+
+  .navbar-input:focus {
+    background: white;
+    box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.3);
+  }
+
+  .navbar-button {
+    background: linear-gradient(to right, var(--accent-pink), var(--accent-blue));
+    border: 2px solid var(--accent-pink);
+    border-radius: 0 25px 25px 0;
+    color: white;
+    padding: 10px 20px;
+    height: 45px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+  }
+
+  .navbar-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .cart-button {
+    background: linear-gradient(to right, var(--accent-blue), var(--accent-pink));
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    text-align: center;
+    height: 45px;
+    border-radius: 25px;
+    font-weight: bold;
+    width: 130px;
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cart-button:hover {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .cart-svg {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 8px;
+    fill: white;
+  }
+
+  .item-number {
+    border-radius: 50%;
+    background-color: var(--accent-pink);
+    height: 24px;
+    width: 24px;
+    padding: 0;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    line-height: 12px;
+    margin-left: 10px;
+    font-size: 14px;
+  }
+
+  .upper-links {
+    display: inline-block;
+    padding: 8px 15px;
+    line-height: 23px;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0;
+    color: var(--text-dark);
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+  }
+
+  .upper-links:hover {
+    background: rgba(181, 232, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .links {
+    color: var(--text-dark);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .links:hover {
+    color: var(--text-dark);
+    text-decoration: none;
+  }
+
+  .emoji {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0px;
+  }
+
+  .dropdown:hover {
+    background-color: transparent;
+  }
+
+  .dropdown:hover .links {
+    color: var(--text-dark);
+  }
+
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dropdown .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    display: none;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--text-dark);
+    left: 0px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    margin: 10px 0 0;
+    padding: 10px;
+    min-width: 180px;
+    backdrop-filter: blur(10px);
+  }
+
+  .profile-links {
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+    display: block;
+    padding: 10px 15px;
+    line-height: 23px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    color: var(--text-dark);
+  }
+
+  .profile-links:hover {
+    background: var(--light-blue);
+    transform: translateX(5px);
+  }
+
+  .largenav {
+    display: none;
+  }
+
+  .smallnav {
+    display: block;
+  }
+
+  .smallsearch {
+    margin-left: 15px;
+    margin-top: 15px;
+  }
+
+  .menu {
+    cursor: pointer;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 28px;
+    margin-right: 10px;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  h2 {
+    margin: 0;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--accent-pink), var(--accent-blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .largenav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .smallnav {
+      display: none;
+    }
+
+    .smallsearch {
+      margin: 0px;
+    }
+    
+    .row1 {
+      padding: 10px 0;
+    }
+  }
+
+  .floating {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    animation: float 15s infinite ease-in-out;
+    z-index: -1;
+  }
+
+  .bubble:nth-child(1) {
+    width: 80px;
+    height: 80px;
+    top: 10%;
+    left: 5%;
+    animation-duration: 15s;
+  }
+
+  .bubble:nth-child(2) {
+    width: 120px;
+    height: 120px;
+    top: 25%;
+    right: 10%;
+    animation-duration: 20s;
+  }
+
+  .bubble:nth-child(3) {
+    width: 60px;
+    height: 60px;
+    bottom: 10%;
+    left: 15%;
+    animation-duration: 12s;
+  }
+  </style>
+</head>
+
+<body>
+  <!-- Decorative bubbles -->
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  
+  <div id="navbar">
+    <div class="container">
+      <div class="row row1">
+        <ul class="largenav pull-right">
+          <li class="upper-links"><a class="links" href="/my-order"><span class="emoji">📦</span> Track Orders</a></li>
+          <li class="upper-links"><a class="links" href="/my-profile"><span class="emoji">👤</span> Profile</a></li>
+         <!-- <li class="upper-links"><a class="links" href="/logout"><span class="emoji">🚪</span> Logout</a></li> -->
+          <li class="upper-links">
+              <form id="logout-form" method="POST" action="{% url 'logout' %}" style="display: none;">
+                {% csrf_token %}
+              </form>
+              <a class="links" href="#" id="logout-link">
+                <span class="emoji">🚪</span> Logout
+              </a>
+          </li>
+        </ul>
+      </div>
+      <div class="row row2">
+        <div class="col-sm-3">
+          <div class="logo-container">
+            <div class="logo">🛍️</div>
+            <h2><a style="text-decoration:none;" href="/"><span class="largenav">Whimsy Shop</span></a></h2>
+          </div>
+        </div>
+
+        <div class="navbar-search smallsearch col-sm-7 col-xs-11">
+          <form action="/search" method="get">
+            <div class="row">
+              <input class="navbar-input col-xs-11" type="search" placeholder="🔍 Search for cute products..." name="query" id="query">
+              <button class="navbar-button col-xs-1" type="submit">
+                <svg width="15px" height="15px">
+                  <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467" fill="#fff"></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="cart1 largenav col-sm-2"> 
+          <a class="cart-button" href="/cart"> 
+            <svg class="cart-svg" width="16" height="16" viewBox="0 0 16 16">
+              <path d="M15.32 2.405H4.887C3 2.405 2.46.805 2.46.805L2.257.21C2.208.085 2.083 0 1.946 0H.336C.1 0-.064.24.024.46l.644 1.945L3.11 9.767c.047.137.175.23.32.23h8.418l-.493 1.958H3.768l.002.003c-.017 0-.033-.003-.05-.003-1.06 0-1.92.86-1.92 1.92s.86 1.92 1.92 1.92c.99 0 1.805-.75 1.91-1.712l5.55.076c.12.922.91 1.636 1.867 1.636 1.04 0 1.885-.844 1.885-1.885 0-.866-.584-1.593-1.38-1.814l2.423-8.832c.12-.433-.206-.86-.655-.86" fill="#fff"></path>
+            </svg> 
+            🛒 Cart <span class="item-number">{{ product_count_in_cart }}</span> 
+          </a> 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  $(document).ready(function(){
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "70%";
+      document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+      document.body.style.backgroundColor = "rgba(0,0,0,0)";
+    }
+
+    // Add floating effect to logo
+    $('.logo').hover(function() {
+      $(this).addClass('floating');
+    }, function() {
+      $(this).removeClass('floating');
+    });
+  });
+  </script>
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const logoutLink = document.getElementById('logout-link');
+      const logoutForm = document.getElementById('logout-form');
+
+      if (logoutLink && logoutForm) {
+        logoutLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          logoutForm.submit();
+        });
+      } else {
+        console.warn('Logout form or link not found');
+      }
+    });
+    </script>
+
+</body>
+</html>

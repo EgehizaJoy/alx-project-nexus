@@ -1,0 +1,349 @@
+{% extends 'ecom/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffdde1, #fbc2eb, #a2d2ff, #b5deff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #5a5a7a;
+            padding: 40px 20px;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(158, 118, 173, 0.2);
+            overflow: hidden;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 0;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffb6c1, #ffcce0);
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        .container::after {
+            content: "";
+            position: absolute;
+            bottom: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        .panel-heading {
+            background: linear-gradient(45deg, #ff7aa2, #a1c4fd);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .panel-heading::after {
+            content: "👥";
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            opacity: 0.3;
+        }
+        
+        .table {
+            width: 100%;
+            margin: 0;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+            padding: 0 20px 20px;
+        }
+        
+        .table thead th {
+            background: rgba(255, 182, 193, 0.2);
+            color: #ff7aa2;
+            font-weight: 700;
+            padding: 15px;
+            text-align: left;
+            border: none;
+            font-size: 1.1rem;
+        }
+        
+        .table tbody tr {
+            background: rgba(255, 240, 245, 0.7);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table tbody tr:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 122, 162, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border: none;
+            border-top: 1px solid rgba(255, 182, 193, 0.3);
+            border-bottom: 1px solid rgba(255, 182, 193, 0.3);
+        }
+        
+        .table tbody td:first-child {
+            border-left: 1px solid rgba(255, 182, 193, 0.3);
+            border-radius: 15px 0 0 15px;
+        }
+        
+        .table tbody td:last-child {
+            border-right: 1px solid rgba(255, 182, 193, 0.3);
+            border-radius: 0 15px 15px 0;
+        }
+        
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffd1dc;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn {
+            border: none;
+            border-radius: 50px;
+            padding: 8px 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 0 5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn i {
+            margin-right: 5px;
+        }
+        
+        .floating-emoji {
+            position: absolute;
+            font-size: 1.8rem;
+            z-index: 10;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .emoji-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .emoji-2 { top: 20%; right: 5%; animation-delay: 1s; }
+        .emoji-3 { bottom: 15%; left: 10%; animation-delay: 2s; }
+        .emoji-4 { bottom: 25%; right: 10%; animation-delay: 3s; }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+            
+            .table thead {
+                display: none;
+            }
+            
+            .table tbody tr {
+                display: block;
+                margin-bottom: 20px;
+                border-radius: 15px;
+            }
+            
+            .table tbody td {
+                display: block;
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border: none;
+                border-bottom: 1px solid rgba(255, 182, 193, 0.3);
+            }
+            
+            .table tbody td:first-child {
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .table tbody td:last-child {
+                border-radius: 0 0 15px 15px;
+                border-bottom: none;
+            }
+            
+            .table tbody td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                width: calc(50% - 15px);
+                padding-right: 15px;
+                font-weight: 600;
+                color: #ff7aa2;
+                text-align: left;
+            }
+            
+            .profile-pic {
+                float: right;
+            }
+            
+            .btn {
+                margin: 5px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<div class="container">
+    <!-- Floating emojis -->
+    <div class="floating-emoji emoji-1">👥</div>
+    <div class="floating-emoji emoji-2">📊</div>
+    <div class="floating-emoji emoji-3">💖</div>
+    <div class="floating-emoji emoji-4">✨</div>
+    
+    <div class="panel-heading">
+        <h6>Total Customers 👨‍👩‍👧‍👦</h6>
+    </div>
+    <table class="table" id="dev-table">
+        <thead>
+            <tr>
+                <th>Name 👤</th>
+                <th>Picture 📸</th>
+                <th>Contact 📱</th>
+                <th>Address 🏠</th>
+                <th>Actions ⚙️</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in customers %}
+            <tr>
+                <td data-label="Name"> {{c.get_name}}</td>
+                <td data-label="Picture"> 
+                    <img src="{% static c.profile_pic.url %}" alt="Profile Pic" class="profile-pic" />
+                </td>
+                <td data-label="Contact">{{c.mobile}}</td>
+                <td data-label="Address">{{c.address}}</td>
+                <td data-label="Actions">
+                    <a class="btn btn-primary" href="{% url 'update-customer' c.id  %}">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a class="btn btn-danger" href="{% url 'delete-customer' c.id  %}">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add hover effect to table rows
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.querySelector('.btn-primary').innerHTML = '<i class="fas fa-edit"></i> Edit ✏️';
+                this.querySelector('.btn-danger').innerHTML = '<i class="fas fa-trash-alt"></i> Delete 🗑️';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.querySelector('.btn-primary').innerHTML = '<i class="fas fa-edit"></i> Edit';
+                this.querySelector('.btn-danger').innerHTML = '<i class="fas fa-trash-alt"></i> Delete';
+            });
+        });
+        
+        // Add animation to buttons
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.classList.contains('btn-danger')) {
+                    if (!confirm('Are you sure you want to delete this customer? 👋')) {
+                        e.preventDefault();
+                    }
+                }
+                
+                // Create floating emoji effect
+                const emoji = document.createElement('div');
+                emoji.className = 'floating-emoji';
+                emoji.innerHTML = this.classList.contains('btn-primary') ? '✏️' : '🗑️';
+                emoji.style.position = 'absolute';
+                emoji.style.top = this.offsetTop + 'px';
+                emoji.style.left = this.offsetLeft + 'px';
+                emoji.style.fontSize = '1.5rem';
+                emoji.style.zIndex = '100';
+                emoji.style.animation = 'float 1.5s ease-in-out forwards';
+                
+                document.body.appendChild(emoji);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    emoji.remove();
+                }, 1500);
+            });
+        });
+    });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Contact Us 🌈 | E-commerce</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
+    
+    body {
+      background: linear-gradient(135deg, #f8f4ff 0%, #e3f2fd 100%);
+      font-family: 'Baloo 2', cursive;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .contact-container {
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .feedback-header {
+      background: linear-gradient(135deg, #a2d2ff 0%, #ffafcc 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 20px rgba(162, 210, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .feedback-header:before {
+      content: "✉️📬💌";
+      position: absolute;
+      font-size: 3em;
+      opacity: 0.1;
+      right: 20px;
+      top: 10px;
+    }
+    
+    .feedback-header h3 {
+      font-size: 2em;
+      margin: 0;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .feedback-header h3:before {
+      content: "💬 ";
+    }
+    
+    .contact-form {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(162, 210, 255, 0.2);
+      border: 2px solid #ffd6e0;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      color: #5a6d80;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    
+    .form-group label:before {
+      content: "🌸 ";
+      color: #ff85a2;
+    }
+    
+    input, textarea {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #c1e3ff;
+      border-radius: 15px;
+      font-size: 1em;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.8);
+    }
+    
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #ffafcc;
+      box-shadow: 0 0 0 3px rgba(255, 175, 204, 0.2);
+      transform: scale(1.02);
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #ffafcc 0%, #a2d2ff 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 30px auto 0;
+      box-shadow: 0 5px 15px rgba(162, 210, 255, 0.4);
+      font-weight: bold;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(255, 175, 204, 0.6);
+    }
+    
+    .submit-btn:before {
+      content: "✈️ ";
+    }
+    
+    .floating-icons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .floating-icon {
+      position: absolute;
+      opacity: 0.1;
+      font-size: 1.5em;
+      animation: float 15s linear infinite;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  {%if request.user.is_authenticated%}
+    {% include "ecom/customer_navbar.html" %}
+  {%else%}
+    {% include "ecom/navbar.html" %}
+  {%endif%}
+
+  <div class="contact-container">
+    <div class="feedback-header">
+      <h3>Send Us Your Valuable Feedback!</h3>
+    </div>
+    
+    <form method="POST" class="contact-form">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ form.as_p }}
+      </div>
+      <input type="submit" value="Send Message" class="submit-btn">
+    </form>
+  </div>
+  
+  <div class="floating-icons" id="floating-icons"></div>
+  
+  {% include "ecom/footer.html" %}
+
+  <script>
+    // Create floating icons
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.getElementById('floating-icons');
+      const icons = ['💌', '📩', '✉️', '📧', '💬', '📝', '📨'];
+      
+      for (let i = 0; i < 15; i++) {
+        const icon = document.createElement('div');
+        icon.className = 'floating-icon';
+        icon.textContent = icons[Math.floor(Math.random() * icons.length)];
+        icon.style.left = Math.random() * 100 + 'vw';
+        icon.style.top = Math.random() * 100 + 'vh';
+        icon.style.animationDuration = 10 + Math.random() * 20 + 's';
+        icon.style.animationDelay = Math.random() * 5 + 's';
+        icon.style.fontSize = (1 + Math.random() * 2) + 'em';
+        container.appendChild(icon);
+      }
+    });
+  </script>
+</body>
+</html>

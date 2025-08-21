@@ -1,0 +1,420 @@
+{% extends 'ecom/customer_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<head>
+  <title>Edit Your Profile ✨</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffd6ff, #bbd0ff);
+      font-family: 'Nunito', 'Comic Sans MS', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Floating elements */
+    .floating {
+      position: absolute;
+      z-index: 0;
+      opacity: 0.7;
+      animation: float 8s infinite ease-in-out;
+    }
+    
+    .floating:nth-child(1) {
+      top: 10%;
+      left: 5%;
+      width: 60px;
+      height: 60px;
+      background: #ffafcc;
+      border-radius: 50%;
+      animation-delay: 0s;
+    }
+    
+    .floating:nth-child(2) {
+      top: 20%;
+      right: 7%;
+      width: 40px;
+      height: 40px;
+      background: #a2d2ff;
+      border-radius: 50%;
+      animation-delay: 1s;
+    }
+    
+    .floating:nth-child(3) {
+      bottom: 15%;
+      left: 8%;
+      width: 30px;
+      height: 30px;
+      background: #cdb4db;
+      border-radius: 50%;
+      animation-delay: 2s;
+    }
+    
+    .floating:nth-child(4) {
+      bottom: 25%;
+      right: 10%;
+      width: 50px;
+      height: 50px;
+      background: #ffc8dd;
+      border-radius: 50%;
+      animation-delay: 3s;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(10deg);
+      }
+    }
+    
+    .profile-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .profile-card {
+      width: 100%;
+      padding: 40px 30px;
+      background: rgba(255, 255, 255, 0.95);
+      text-align: center;
+      border-radius: 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+      border: 3px solid rgba(255, 255, 255, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .profile-card::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: linear-gradient(45deg, #ffafcc, #a2d2ff, #cdb4db, #ffc8dd);
+      z-index: -1;
+      border-radius: 35px;
+      animation: gradient 15s ease infinite;
+      background-size: 400% 400%;
+    }
+    
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    .profile-header {
+      margin-bottom: 40px;
+    }
+    
+    .profile-header h1 {
+      color: #6a5acd;
+      font-weight: 800;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+    }
+    
+    .emoji-decoration {
+      font-size: 3rem;
+      margin: 20px 0;
+      line-height: 1;
+    }
+    
+    .profile-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      text-align: left;
+      margin-bottom: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #6a5acd;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .form-group input,
+    .form-group input[type="file"] {
+      width: 100%;
+      padding: 16px 20px;
+      border: 3px dashed #a2d2ff;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+      color: #6a5acd;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+    
+    .form-group input:focus {
+      border: 3px solid #ffafcc;
+      box-shadow: 0 5px 15px rgba(255, 175, 204, 0.3);
+      transform: translateY(-3px);
+    }
+    
+    .form-group input::placeholder {
+      color: #b0c4de;
+      font-weight: 500;
+    }
+    
+    .profile-pic-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px dashed #ffafcc;
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.8);
+      overflow: hidden;
+    }
+    
+    .profile-pic-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .profile-pic-preview i {
+      font-size: 2.5rem;
+      color: #cdb4db;
+    }
+    
+    .submit-btn {
+      margin-top: 30px;
+    }
+    
+    .submit-btn input[type="submit"] {
+      border: 0;
+      background: linear-gradient(45deg, #ffafcc, #cdb4db);
+      display: block;
+      margin: 0 auto;
+      text-align: center;
+      padding: 18px 60px;
+      outline: none;
+      color: white;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 20px rgba(255, 175, 204, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .submit-btn input[type="submit"]:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 12px 25px rgba(255, 175, 204, 0.6);
+      background: linear-gradient(45deg, #ffc8dd, #d8bfd8);
+    }
+    
+    .submit-btn input[type="submit"]:active {
+      transform: translateY(2px);
+    }
+    
+    .submit-btn input[type="submit"]::after {
+      content: "✨";
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: all 0.3s ease;
+    }
+    
+    .submit-btn input[type="submit"]:hover::after {
+      right: 15px;
+      transform: translateY(-50%) rotate(20deg);
+    }
+    
+    .profile-footer {
+      margin-top: 30px;
+      color: #7c7cbd;
+      font-weight: 600;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .profile-form {
+        grid-template-columns: 1fr;
+      }
+      
+      .profile-card {
+        padding: 30px 20px;
+      }
+      
+      .profile-header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .emoji-decoration {
+        font-size: 2.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .profile-header h1 {
+        font-size: 2rem;
+      }
+      
+      .form-group input {
+        padding: 14px 16px;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<!-- Floating decorative elements -->
+<div class="floating"></div>
+<div class="floating"></div>
+<div class="floating"></div>
+<div class="floating"></div>
+
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="emoji-decoration">✨ 👤 🎀</div>
+      <h1>Edit Your Profile 🦋</h1>
+      <p>Make your profile uniquely you with these magical updates!</p>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="profile-form">
+        <!-- Profile picture preview -->
+        <div class="form-group" style="grid-column: span 2; text-align: center;">
+          <div class="profile-pic-preview" id="profilePicPreview">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <label for="id_profile_pic"><i class="fas fa-camera"></i> Profile Picture 📸</label>
+          {% render_field customerForm.profile_pic class="form-control" id="profilePicInput" %}
+          <p style="color: #7c7cbd; font-size: 0.9rem; margin-top: 5px;">Click to choose a new magical photo!</p>
+        </div>
+        
+        <!-- First Name -->
+        <div class="form-group">
+          <label for="id_first_name"><i class="fas fa-user"></i> First Name 🌸</label>
+          {% render_field userForm.first_name class="form-control" placeholder="Your first name" %}
+        </div>
+        
+        <!-- Last Name -->
+        <div class="form-group">
+          <label for="id_last_name"><i class="fas fa-user"></i> Last Name 🌼</label>
+          {% render_field userForm.last_name class="form-control" placeholder="Your last name" %}
+        </div>
+        
+        <!-- Username -->
+        <div class="form-group">
+          <label for="id_username"><i class="fas fa-at"></i> Username 🦄</label>
+          {% render_field userForm.username class="form-control" placeholder="Your unique username" %}
+        </div>
+        
+        <!-- Password -->
+        <div class="form-group">
+          <label for="id_password"><i class="fas fa-lock"></i> Password 🔒</label>
+          {% render_field userForm.password class="form-control" placeholder="Update your password" %}
+        </div>
+        
+        <!-- Mobile -->
+        <div class="form-group">
+          <label for="id_mobile"><i class="fas fa-phone"></i> Mobile 📱</label>
+          {% render_field customerForm.mobile class="form-control" placeholder="Your contact number" %}
+        </div>
+        
+        <!-- Address -->
+        <div class="form-group">
+          <label for="id_address"><i class="fas fa-home"></i> Address 🏠</label>
+          {% render_field customerForm.address class="form-control" placeholder="Your current address" %}
+        </div>
+      </div>
+      
+      <div class="submit-btn">
+        <input type="submit" value="Save Changes ✨">
+      </div>
+    </form>
+    
+    <div class="profile-footer">
+      <p>Make your profile shine! ✨</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Profile picture preview functionality
+  const profilePicInput = document.getElementById('profilePicInput');
+  const profilePicPreview = document.getElementById('profilePicPreview');
+  
+  profilePicInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      
+      reader.addEventListener('load', function() {
+        profilePicPreview.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = this.result;
+        profilePicPreview.appendChild(img);
+      });
+      
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  // Add floating labels effect
+  document.querySelectorAll('.form-group input').forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.style.transform = 'translateY(-5px)';
+      this.parentElement.style.transition = 'transform 0.3s ease';
+    });
+    
+    input.addEventListener('blur', function() {
+      this.parentElement.style.transform = 'translateY(0)';
+    });
+  });
+  
+  // Add floating effect to the profile card
+  const profileCard = document.querySelector('.profile-card');
+  window.addEventListener('mousemove', (e) => {
+    const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+    const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+    profileCard.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+  });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Sweet Shop Signup</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Nunito', sans-serif;
+      }
+      
+      body {
+        background: linear-gradient(135deg, #d0e8ff, #bbd0ff);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        overflow-x: hidden;
+      }
+      
+      .container {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      
+      .signup-card {
+        width: 100%;
+        padding: 40px 30px;
+        background: rgba(255, 255, 255, 0.95);
+        text-align: center;
+        border-radius: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        border: 3px solid rgba(255, 255, 255, 0.7);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .signup-card::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        background: #a2d2ff;
+        z-index: -1;
+        border-radius: 35px;
+      }
+      
+      .signup-header {
+        margin-bottom: 30px;
+      }
+      
+      .signup-header h1 {
+        color: #4a6fa5;
+        font-weight: 800;
+        font-size: 2.8rem;
+        margin-bottom: 15px;
+      }
+      
+      .signup-header p {
+        color: #6a7f9d;
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+      
+      .signup-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        text-align: left;
+        margin-bottom: 30px;
+      }
+      
+      .form-group {
+        margin-bottom: 15px;
+      }
+      
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #4a6fa5;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+      
+      .form-group input {
+        width: 100%;
+        padding: 16px 20px;
+        border: 3px dashed #a2d2ff;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 1.1rem;
+        color: #4a6fa5;
+        transition: all 0.3s ease;
+        outline: none;
+      }
+      
+      .form-group input:focus {
+        border: 3px solid #4a6fa5;
+        box-shadow: 0 0 10px rgba(74, 111, 165, 0.3);
+      }
+      
+      .form-group input::placeholder {
+        color: #b0c4de;
+        font-weight: 500;
+      }
+      
+      .profile-pic-container {
+        grid-column: span 2;
+        text-align: center;
+        padding: 20px;
+        border: 3px dashed #a2d2ff;
+        border-radius: 20px;
+        margin: 10px 0;
+      }
+      
+      .profile-pic-container label {
+        display: block;
+        margin-bottom: 15px;
+        color: #4a6fa5;
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+      
+      .profile-pic-container input {
+        margin: 0 auto;
+        width: auto;
+        padding: 10px;
+        border: none;
+      }
+      
+      .submit-btn {
+        grid-column: span 2;
+        margin-top: 20px;
+      }
+      
+      .submit-btn input[type="submit"] {
+        border: 0;
+        background: linear-gradient(45deg, #a2d2ff, #4a6fa5);
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+        padding: 18px 60px;
+        outline: none;
+        color: white;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        font-size: 1.3rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        box-shadow: 0 8px 20px rgba(74, 111, 165, 0.4);
+      }
+      
+      .submit-btn input[type="submit"]:hover {
+        background: linear-gradient(45deg, #bbd0ff, #6a8fbd);
+        box-shadow: 0 8px 25px rgba(74, 111, 165, 0.6);
+      }
+      
+      .login-link {
+        margin-top: 25px;
+        color: #4a6fa5;
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+      
+      .login-link a {
+        color: #4a6fa5;
+        text-decoration: none;
+        font-weight: 800;
+        transition: all 0.3s ease;
+      }
+      
+      .login-link a:hover {
+        text-decoration: underline;
+        color: #6a8fbd;
+      }
+      
+      .footer {
+        width: 100%;
+        text-align: center;
+        padding: 20px;
+        color: #4a6fa5;
+        font-weight: 600;
+        margin-top: 30px;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .footer p {
+        margin: 5px 0;
+      }
+      
+      @media (max-width: 768px) {
+        .signup-form {
+          grid-template-columns: 1fr;
+        }
+        
+        .profile-pic-container, .submit-btn {
+          grid-column: span 1;
+        }
+        
+        .signup-card {
+          padding: 30px 20px;
+        }
+        
+        .signup-header h1 {
+          font-size: 2.3rem;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .signup-header h1 {
+          font-size: 2rem;
+        }
+        
+        .signup-header p {
+          font-size: 1rem;
+        }
+        
+        .form-group input {
+          padding: 14px 16px;
+        }
+      }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="signup-card">
+        <div class="signup-header">
+          <h1>Create Your Account</h1>
+          <p>Join our community and start your shopping adventure with us!</p>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="signup-form">
+            <div class="form-group">
+              <label for="first_name"><i class="fas fa-user"></i> First Name</label>
+              <input type="text" id="first_name" name="first_name" placeholder="Your first name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="last_name"><i class="fas fa-user"></i> Last Name</label>
+              <input type="text" id="last_name" name="last_name" placeholder="Your last name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="username"><i class="fas fa-at"></i> Username</label>
+              <input type="text" id="username" name="username" placeholder="Choose a username" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="password"><i class="fas fa-lock"></i> Password 🔒</label>
+              <input type="password" id="password" name="password" placeholder="Create a password" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="address"><i class="fas fa-home"></i> Address</label>
+              <input type="text" id="address" name="address" placeholder="Your delivery address" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="mobile"><i class="fas fa-phone"></i> Contact</label>
+              <input type="text" id="mobile" name="mobile" placeholder="Your phone number" required>
+            </div>
+            
+            <div class="profile-pic-container">
+              <label for="profile_pic"><i class="fas fa-camera"></i> Profile Picture</label>
+              <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+              <p style="color: #6a7f9d; margin-top: 10px;">Upload a photo of yourself (Optional)</p>
+            </div>
+            
+            <div class="submit-btn">
+              <input type="submit" value="Create Account">
+            </div>
+          </div>
+        </form>
+        
+        <div class="login-link">
+          Already have an account? <a href="#">Login Here</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>Sweet Shop E-commerce</p>
+      <p>© 2023 All rights reserved</p>
+    </div>
+  </body>
+</html>

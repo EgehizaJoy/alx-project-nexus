@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>📊 Dashboard Overview</title>
+
+  <style>
+    :root {
+      --pastel-pink: #ffd6e7;
+      --pastel-green: #d4f7d4;
+      --pastel-blue: #d4e8ff;
+      --hover-dark: rgba(0, 0, 0, 0.15);
+      --text-dark: #1f3a56;
+    }
+
+    body {
+      background: #f5faff;
+      font-family: 'Segoe UI', sans-serif;
+      color: var(--text-dark);
+    }
+
+    .market-update-block {
+      padding: 2em 2em;
+      border-radius: 20px;
+      text-align: left;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .market-update-block h3 {
+      font-size: 2.5em;
+      font-weight: bold;
+    }
+
+    .market-update-block h4 {
+      font-size: 1.2em;
+      margin: 0.3em 0em;
+      opacity: 0.85;
+    }
+
+    .market-update-block p {
+      font-size: 0.9em;
+      line-height: 1.8em;
+    }
+
+    /* Pastel color sets */
+    .market-update-block.clr-block-1 {
+      background: var(--pastel-pink);
+    }
+
+    .market-update-block.clr-block-2 {
+      background: var(--pastel-green);
+    }
+
+    .market-update-block.clr-block-3 {
+      background: var(--pastel-blue);
+    }
+
+    /* Hover effects */
+    .market-update-block:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Icon styles */
+    .market-update-right i {
+      font-size: 3em;
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 80px;
+      color: var(--text-dark);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .market-update-left {
+      padding: 0px;
+    }
+
+    /* Grid responsiveness */
+    .market-updates {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .market-update-gd {
+      flex: 1;
+      min-width: 250px;
+      max-width: 320px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <div class="market-updates">
+    <div class="market-update-gd">
+      <div class="market-update-block clr-block-1">
+        <div class="col-md-8 market-update-left">
+          <h3>👥 {{customercount}}</h3>
+          <h4>Registered Customers</h4>
+        </div>
+        <div class="col-md-4 market-update-right">
+          <i class="fa fa-users"></i>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+
+    <div class="market-update-gd">
+      <div class="market-update-block clr-block-2">
+        <div class="col-md-8 market-update-left">
+          <h3>🛍️ {{productcount}}</h3>
+          <h4>Total Products</h4>
+        </div>
+        <div class="col-md-4 market-update-right">
+          <i class="fa fa-shopping-cart"></i>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+
+    <div class="market-update-gd">
+      <div class="market-update-block clr-block-3">
+        <div class="col-md-8 market-update-left">
+          <h3>📦 {{ordercount}}</h3>
+          <h4>Total Orders</h4>
+        </div>
+        <div class="col-md-4 market-update-right">
+          <i class="fa fa-bar-chart"></i>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+  </div>
+
+  <br><br>
+</body>
+<!-- developed By : Naem Azam -->
+</html>

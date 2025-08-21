@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Sent! 🎉</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', 'Comic Sans MS', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffd6ff, #bbd0ff);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Floating elements */
+        .floating {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.7;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        .floating:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            width: 60px;
+            height: 60px;
+            background: #ffafcc;
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+        
+        .floating:nth-child(2) {
+            top: 20%;
+            right: 7%;
+            width: 40px;
+            height: 40px;
+            background: #a2d2ff;
+            border-radius: 50%;
+            animation-delay: 1s;
+        }
+        
+        .floating:nth-child(3) {
+            bottom: 15%;
+            left: 8%;
+            width: 30px;
+            height: 30px;
+            background: #cdb4db;
+            border-radius: 50%;
+            animation-delay: 2s;
+        }
+        
+        .floating:nth-child(4) {
+            bottom: 25%;
+            right: 10%;
+            width: 50px;
+            height: 50px;
+            background: #ffc8dd;
+            border-radius: 50%;
+            animation-delay: 3s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+        
+        .success-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            text-align: center;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.7);
+        }
+        
+        .success-container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #ffafcc, #a2d2ff, #cdb4db, #ffc8dd);
+            z-index: -1;
+            border-radius: 35px;
+            animation: gradient 15s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .success-icon {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffafcc, #a2d2ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: pulse 2s infinite;
+            box-shadow: 0 10px 30px rgba(255, 175, 204, 0.5);
+        }
+        
+        .success-icon i {
+            font-size: 70px;
+            color: white;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(162, 210, 255, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 20px rgba(162, 210, 255, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(162, 210, 255, 0);
+            }
+        }
+        
+        .success-message {
+            color: #6a5acd;
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+        }
+        
+        .success-text {
+            color: #7c7cbd;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+        
+        .emoji-decoration {
+            font-size: 3.5rem;
+            margin: 30px 0;
+            line-height: 1;
+            letter-spacing: 15px;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff6b9c;
+            border-radius: 50%;
+            animation: confetti-fall 5s linear infinite;
+        }
+        
+        .confetti:nth-child(5n) {
+            background: #a2d2ff;
+        }
+        
+        .confetti:nth-child(5n+1) {
+            background: #ffafcc;
+        }
+        
+        .confetti:nth-child(5n+2) {
+            background: #cdb4db;
+        }
+        
+        .confetti:nth-child(5n+3) {
+            background: #ffc8dd;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            border: 0;
+            background: linear-gradient(45deg, #ffafcc, #cdb4db);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(255, 175, 204, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 175, 204, 0.6);
+        }
+        
+        .action-btn.secondary {
+            background: linear-gradient(45deg, #a2d2ff, #8a9eff);
+        }
+        
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            text-align: center;
+            margin-top: auto;
+            border-top: 3px dashed #cdb4db;
+            position: relative;
+            z-index: 1;
+        }
+        
+        footer p {
+            color: #6a5acd;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .success-container {
+                margin: 80px 20px 40px;
+                padding: 30px 20px;
+            }
+            
+            .success-message {
+                font-size: 2rem;
+            }
+            
+            .emoji-decoration {
+                font-size: 2.5rem;
+                letter-spacing: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .success-message {
+                font-size: 1.8rem;
+            }
+            
+            .success-text {
+                font-size: 1rem;
+            }
+            
+            .success-icon {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .success-icon i {
+                font-size: 50px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Confetti animation -->
+    <div class="confetti" style="left: 10%;"></div>
+    <div class="confetti" style="left: 20%;"></div>
+    <div class="confetti" style="left: 30%;"></div>
+    <div class="confetti" style="left: 40%;"></div>
+    <div class="confetti" style="left: 50%;"></div>
+    <div class="confetti" style="left: 60%;"></div>
+    <div class="confetti" style="left: 70%;"></div>
+    <div class="confetti" style="left: 80%;"></div>
+    <div class="confetti" style="left: 90%;"></div>
+    
+    <!-- Floating decorative elements -->
+    <div class="floating"></div>
+    <div class="floating"></div>
+    <div class="floating"></div>
+    <div class="floating"></div>
+    
+    <!-- Conditional navbar -->
+    {% if request.user.is_authenticated %}
+        {% include "ecom/customer_navbar.html" %}
+    {% else %}
+        {% include "ecom/navbar.html" %}
+    {% endif %}
+    
+    <div class="success-container">
+        <div class="success-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        
+        <h1 class="success-message">Your Feedback Sent Successfully! 🎉</h1>
+        
+        <div class="emoji-decoration">✨ 🎉 💌 ✨</div>
+        
+        <p class="success-text">
+            Thank you so much for sharing your thoughts with us! 💖<br>
+            We truly appreciate your feedback and will use it to make our service even better. 
+            Our team is already reviewing your suggestions and will get back to you if needed.
+        </p>
+        
+        <div class="action-buttons">
+            <a href="/" class="action-btn">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+            <a href="/contact" class="action-btn secondary">
+                <i class="fas fa-envelope"></i> Send Another
+            </a>
+        </div>
+    </div>
+    
+    <footer>
+        {% include "ecom/footer.html" %}
+    </footer>
+    
+    <script>
+        // Add more confetti for celebration
+        function createConfetti() {
+            const container = document.body;
+            const confettiCount = 30;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.animationDelay = (Math.random() * 2) + 's';
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = confetti.style.width;
+                container.appendChild(confetti);
+                
+                // Remove confetti after animation completes
+                setTimeout(() => {
+                    confetti.remove();
+                }, 7000);
+            }
+        }
+        
+        // Create initial confetti
+        createConfetti();
+        
+        // Create more confetti every few seconds
+        setInterval(createConfetti, 3000);
+        
+        // Add floating effect to the success container
+        const successContainer = document.querySelector('.success-container');
+        window.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+            successContainer.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+    </script>
+</body>
+</html>

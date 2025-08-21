@@ -1,0 +1,254 @@
+{% extends 'ecom/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffdde1, #fbc2eb, #a2d2ff, #b5deff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: #5a5a7a;
+            padding: 40px 20px;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .page-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: #ff7aa2;
+            background: linear-gradient(45deg, #ff7aa2, #a1c4fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            padding: 0 20px;
+        }
+        
+        .page-header::after {
+            content: "";
+            display: block;
+            width: 150px;
+            height: 6px;
+            background: linear-gradient(to right, #ffb6c1, #87cefa);
+            margin: 15px auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .feedback-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .feedback-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(158, 118, 173, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(158, 118, 173, 0.25);
+        }
+        
+        .feedback-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ffb6c1, #a1c4fd);
+        }
+        
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed rgba(255, 182, 193, 0.5);
+        }
+        
+        .feedback-meta {
+            font-weight: 600;
+            color: #ff7aa2;
+            font-size: 1.1rem;
+        }
+        
+        .feedback-date {
+            color: #6a6a8e;
+            font-size: 0.9rem;
+        }
+        
+        .feedback-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #5a5a7a;
+            padding: 15px 0;
+        }
+        
+        .closebtn {
+            color: #ff7aa2;
+            font-weight: bold;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.3s;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+        
+        .closebtn:hover {
+            color: #a1c4fd;
+            transform: rotate(90deg);
+        }
+        
+        .floating-emoji {
+            position: absolute;
+            font-size: 1.8rem;
+            z-index: 10;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .emoji-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .emoji-2 { top: 20%; right: 5%; animation-delay: 1s; }
+        .emoji-3 { bottom: 15%; left: 10%; animation-delay: 2s; }
+        .emoji-4 { bottom: 25%; right: 10%; animation-delay: 3s; }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 2px dashed rgba(255, 182, 193, 0.5);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: #ff7aa2;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state p {
+            font-size: 1.2rem;
+            color: #6a6a8e;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h2 {
+                font-size: 2rem;
+            }
+            
+            .feedback-container {
+                width: 95%;
+            }
+            
+            .feedback-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<div class="feedback-container">
+    <!-- Floating emojis -->
+    <div class="floating-emoji emoji-1">💬</div>
+    <div class="floating-emoji emoji-2">📝</div>
+    <div class="floating-emoji emoji-3">💖</div>
+    <div class="floating-emoji emoji-4">✨</div>
+    
+    <div class="page-header">
+        <h2>Feedbacks By User 💌</h2>
+    </div>
+    
+    {% if feedbacks %}
+        {% for f in feedbacks %}
+        <div class="feedback-card">
+            <div class="feedback-header">
+                <div class="feedback-meta">
+                    <i class="fas fa-user"></i> {{f.name}} 
+                    <span class="feedback-date">|| {{f.date}}</span>
+                </div>
+                <button class="closebtn" onclick="this.parentElement.parentElement.style.display='none';">&times;</button>
+            </div>
+            <div class="feedback-content">
+                <i class="fas fa-quote-left" style="color: #ffb6c1;"></i> 
+                {{f.feedback}} 
+                <i class="fas fa-quote-right" style="color: #a1c4fd;"></i>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <i class="fas fa-comment-slash"></i>
+            <p>No feedbacks yet! Check back later 🌸</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to feedback cards
+        const cards = document.querySelectorAll('.feedback-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+        
+        // Add hover effect to close buttons
+        const closeButtons = document.querySelectorAll('.closebtn');
+        closeButtons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.innerHTML = '&times; 👋';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.innerHTML = '&times;';
+            });
+        });
+    });
+</script>
+
+{% endblock content %}

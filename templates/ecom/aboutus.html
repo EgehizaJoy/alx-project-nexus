@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>About Us | Whimsical E-commerce</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Nunito', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #ffdde1, #fbc2eb, #a2d2ff, #b5deff);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      color: #5a5a7a;
+    }
+    
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+    }
+    
+    /* Home link style - added at the top */
+    .home-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: linear-gradient(45deg, #ffb6c1, #a1c4fd);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+    
+    .home-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    
+    .home-link i {
+      margin-right: 8px;
+    }
+    
+    .about-content {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 25px;
+      padding: 60px;
+      box-shadow: 0 15px 35px rgba(158, 118, 173, 0.2);
+      border: 3px solid rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      margin-top: 40px;
+    }
+    
+    .about-content::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #ffb6c1, #ffcce0);
+      z-index: -1;
+      opacity: 0.2;
+    }
+    
+    .about-content::after {
+      content: "";
+      position: absolute;
+      bottom: -60px;
+      right: -60px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+      z-index: -1;
+      opacity: 0.2;
+    }
+    
+    h3 {
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: #ff7aa2;
+      margin-bottom: 30px;
+      background: linear-gradient(45deg, #ff7aa2, #a1c4fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .dev-card {
+      background: rgba(255, 240, 245, 0.8);
+      border-radius: 20px;
+      padding: 30px;
+      margin-top: 40px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+      border: 2px dashed rgba(255, 182, 193, 0.5);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .dev-card::before {
+      content: "💻";
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 3rem;
+      opacity: 0.1;
+      z-index: 0;
+    }
+    
+    .dev-name {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      color: #ff7aa2;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .dev-bio {
+      font-size: 1.1rem;
+      color: #6a6a8e;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .floating-emoji {
+      position: absolute;
+      font-size: 1.8rem;
+      z-index: 10;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .emoji-1 { top: 10%; left: 5%; animation-delay: 0s; }
+    .emoji-2 { top: 20%; right: 5%; animation-delay: 1s; }
+    .emoji-3 { bottom: 15%; left: 10%; animation-delay: 2s; }
+    .emoji-4 { bottom: 25%; right: 10%; animation-delay: 3s; }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    @media (max-width: 768px) {
+      .about-content {
+        padding: 40px 20px;
+      }
+      
+      h3 {
+        font-size: 1.8rem;
+      }
+      
+      p {
+        font-size: 1.1rem;
+      }
+      
+      .dev-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  {%if request.user.is_authenticated%}
+    {% include "ecom/customer_navbar.html" %}
+  {%else%}
+    {% include "ecom/navbar.html" %}
+  {%endif%}
+  
+  <div class="container">
+    <!-- Floating emojis -->
+    <div class="floating-emoji emoji-1">🌈</div>
+    <div class="floating-emoji emoji-2">✨</div>
+    <div class="floating-emoji emoji-3">💖</div>
+    <div class="floating-emoji emoji-4">🛍️</div>
+    
+    <!-- Home link added here -->
+    <a href="/" class="home-link">
+      <i class="fas fa-home"></i> Back Home
+    </a>
+    
+    <div class="about-content">
+      <h3>About Our Whimsical E-commerce 🎀</h3>
+      <p>
+        "A simple project based on an Online Ecommerce Site that uses Python with Django Web Framework. 
+        Following Django project contains all the important features which can be in use for the second year 
+        IT students for their college projects." 🎓
+      </p>
+      
+      <div class="dev-card">
+        <div class="dev-name">Naem Azam 👨‍💻</div>
+        <div class="dev-bio">
+          I'm a Self-taught Programmer, Technophile and an open-source enthusiast and maintainer. 
+          Passionate about creating beautiful, functional web applications that bring joy to users! 💻✨
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% include "ecom/footer.html" %}
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add animation to home link
+      const homeLink = document.querySelector('.home-link');
+      homeLink.addEventListener('mouseenter', function() {
+        this.innerHTML = '<i class="fas fa-home"></i> Home Sweet Home 🏡';
+      });
+      
+      homeLink.addEventListener('mouseleave', function() {
+        this.innerHTML = '<i class="fas fa-home"></i> Back Home';
+      });
+      
+      // Add animation to dev card
+      const devCard = document.querySelector('.dev-card');
+      devCard.addEventListener('mouseenter', function() {
+        this.querySelector('.dev-name').innerHTML = 'Naem Azam 👨‍💻✨';
+      });
+      
+      devCard.addEventListener('mouseleave', function() {
+        this.querySelector('.dev-name').innerHTML = 'Naem Azam 👨‍💻';
+      });
+    });
+  </script>
+</body>
+<!--
+developed By : Naem Azam
+-->
+
+</html>

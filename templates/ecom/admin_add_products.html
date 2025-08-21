@@ -1,0 +1,297 @@
+{% extends 'ecom/admin_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffdde1, #fbc2eb, #a2d2ff, #b5deff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: #5a5a7a;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+            white-space: pre-wrap; /* Keep line breaks */
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .product-form {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(158, 118, 173, 0.2);
+            overflow: hidden;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+        }
+        
+        .product-form::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffb6c1, #ffcce0);
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        .product-form::after {
+            content: "";
+            position: absolute;
+            bottom: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        .form-header {
+            background: linear-gradient(45deg, #ff7aa2, #a1c4fd);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-header::after {
+            content: "🛍️";
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            opacity: 0.3;
+        }
+        
+        .form-content {
+            padding: 40px;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+        
+        .col-md-6 {
+            padding: 0 15px;
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #ff7aa2;
+            font-size: 1.1rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ffd1dc;
+            border-radius: 15px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-control:focus {
+            border-color: #a1c4fd;
+            box-shadow: 0 4px 15px rgba(161, 196, 253, 0.3);
+            outline: none;
+        }
+        
+        .btnSubmit {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            display: block;
+            margin: 30px auto 0;
+            width: auto;
+            min-width: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btnSubmit:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.4);
+        }
+        
+        .btnSubmit::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btnSubmit:hover::before {
+            left: 100%;
+        }
+        
+        .floating-emoji {
+            position: absolute;
+            font-size: 1.8rem;
+            z-index: 10;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .emoji-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .emoji-2 { top: 20%; right: 5%; animation-delay: 1s; }
+        .emoji-3 { bottom: 15%; left: 10%; animation-delay: 2s; }
+        .emoji-4 { bottom: 25%; right: 10%; animation-delay: 3s; }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @media (max-width: 768px) {
+            .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            
+            .form-content {
+                padding: 30px 20px;
+            }
+            
+            .form-header {
+                padding: 20px;
+                font-size: 1.5rem;
+            }
+            
+            .btnSubmit {
+                padding: 12px 25px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+
+<div class="container">
+    <!-- Floating emojis -->
+    <div class="floating-emoji emoji-1">✨</div>
+    <div class="floating-emoji emoji-2">🛍️</div>
+    <div class="floating-emoji emoji-3">➕</div>
+    <div class="floating-emoji emoji-4">💖</div>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="product-form">
+            <div class="form-header">
+                <p>ADD NEW PRODUCTS 🎁</p>
+            </div>
+            <div class="form-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for=""><i class="fas fa-tag"></i> Product Name</label>
+                            {% render_field productForm.name class="form-control" placeholder="Product Name" %}
+                        </div>
+                        <div class="form-group">
+                            <label for=""><i class="fas fa-align-left"></i> Short Description</label>
+                                {% render_field productForm.description|attr:"rows:6"|attr:"style:min-height:150px;" class="form-control" placeholder="Description" %}
+                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for=""><i class="fas fa-dollar-sign"></i> Product Price (Kes)</label>
+                            {% render_field productForm.price class="form-control" placeholder="52" %}
+                        </div>
+                        <div class="form-group">
+                            <label for=""><i class="fas fa-image"></i> Product Image</label>
+                            {% render_field productForm.product_image class="form-control" placeholder="product_image" %}
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btnSubmit">
+                    <i class="fas fa-plus-circle"></i> ADD PRODUCT
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to submit button
+        const btnSubmit = document.querySelector('.btnSubmit');
+        btnSubmit.addEventListener('mouseenter', function() {
+            this.innerHTML = '<i class="fas fa-plus-circle"></i> ADDING... ✨';
+        });
+        
+        btnSubmit.addEventListener('mouseleave', function() {
+            this.innerHTML = '<i class="fas fa-plus-circle"></i> ADD PRODUCT';
+        });
+        
+        // Add focus effects to form inputs
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('label').style.color = '#a1c4fd';
+                this.style.borderColor = '#a1c4fd';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.querySelector('label').style.color = '#ff7aa2';
+                this.style.borderColor = '#ffd1dc';
+            });
+        });
+    });
+</script>
+
+{% endblock content %}

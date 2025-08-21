@@ -1,0 +1,557 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  :root {
+    --pastel-pink: #ffd6ff;
+    --pastel-blue: #bbd0ff;
+    --accent-pink: #ffafcc;
+    --accent-blue: #a2d2ff;
+    --dark-purple: #6a5acd;
+    --light-purple: #cdb4db;
+  }
+  
+  body {
+    background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-blue));
+    font-family: 'Nunito', 'Comic Sans MS', sans-serif;
+    min-height: 100vh;
+  }
+  
+  /* Floating elements */
+  .floating {
+    position: absolute;
+    z-index: 0;
+    opacity: 0.7;
+    animation: float 8s infinite ease-in-out;
+  }
+  
+  .floating:nth-child(1) {
+    top: 10%;
+    left: 5%;
+    width: 60px;
+    height: 60px;
+    background: var(--accent-pink);
+    border-radius: 50%;
+    animation-delay: 0s;
+  }
+  
+  .floating:nth-child(2) {
+    top: 20%;
+    right: 7%;
+    width: 40px;
+    height: 40px;
+    background: var(--accent-blue);
+    border-radius: 50%;
+    animation-delay: 1s;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(10deg);
+    }
+  }
+  
+  .page-header {
+    text-align: center;
+    margin: 40px 0 30px;
+    position: relative;
+  }
+  
+  .page-header h1 {
+    color: var(--dark-purple);
+    font-size: 2.8rem;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 15px 40px;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    font-weight: 800;
+    text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+  }
+  
+  .order-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .order-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    position: relative;
+    transition: all 0.4s ease;
+  }
+  
+  .order-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  .order-card::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(45deg, var(--accent-pink), var(--accent-blue));
+    z-index: -1;
+    border-radius: 35px;
+    animation: gradient 15s ease infinite;
+    background-size: 400% 400%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  
+  .order-card:hover::before {
+    opacity: 0.3;
+  }
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .order-header {
+    background: rgba(162, 210, 255, 0.2);
+    padding: 20px;
+    border-bottom: 3px dashed var(--accent-blue);
+  }
+  
+  .order-header h2 {
+    color: var(--dark-purple);
+    font-size: 1.8rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .order-body {
+    padding: 30px;
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .product-card {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 2px dashed var(--accent-pink);
+  }
+  
+  .product-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px dashed var(--accent-blue);
+  }
+  
+  .product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  .product-details {
+    flex: 1;
+  }
+  
+  .product-name {
+    color: var(--dark-purple);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  
+  .product-description {
+    color: var(--dark-purple);
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+  }
+  
+  .product-price {
+    color: var(--accent-pink);
+    font-size: 1.4rem;
+    font-weight: 800;
+  }
+  
+  .order-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+  
+  .info-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 2px dashed var(--light-purple);
+  }
+  
+  .info-card h3 {
+    color: var(--accent-pink);
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .info-card p {
+    color: var(--dark-purple);
+    font-size: 1.1rem;
+    margin: 0 0 10px;
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  
+  .status-pending {
+    background: linear-gradient(45deg, #FFD166, #FFB347);
+    color: #5a4a00;
+  }
+  
+  .status-confirmed {
+    background: linear-gradient(45deg, #06D6A0, #0ACF83);
+    color: #004d32;
+  }
+  
+  .status-out {
+    background: linear-gradient(45deg, #118AB2, #0A7EA4);
+    color: white;
+  }
+  
+  .status-delivered {
+    background: linear-gradient(45deg, #EF476F, #E63946);
+    color: white;
+  }
+  
+  .invoice-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(45deg, var(--accent-pink), var(--accent-blue));
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 5px 15px rgba(255, 175, 204, 0.4);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .invoice-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(255, 175, 204, 0.6);
+  }
+  
+  /* Tracking section */
+  .tracking-container {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 2px dashed var(--accent-blue);
+  }
+  
+  .tracking-title {
+    text-align: center;
+    color: var(--dark-purple);
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    font-weight: 700;
+  }
+  
+  .tracking-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 50px 0;
+  }
+  
+  .tracking-steps::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: rgba(162, 210, 255, 0.3);
+    border-radius: 4px;
+    z-index: 1;
+  }
+  
+  .tracking-step {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    flex: 1;
+  }
+  
+  .step-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-size: 24px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 3px solid var(--accent-blue);
+    color: var(--dark-purple);
+    transition: all 0.3s ease;
+  }
+  
+  .step-text {
+    color: var(--dark-purple);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  
+  .step-active .step-icon {
+    background: linear-gradient(45deg, var(--accent-pink), var(--accent-blue));
+    color: white;
+    transform: scale(1.1);
+    border-color: white;
+  }
+  
+  .step-active .step-text {
+    color: var(--accent-pink);
+    font-weight: 800;
+  }
+  
+  .step-connector {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(to right, var(--accent-pink), var(--accent-blue));
+    border-radius: 4px;
+    z-index: 1;
+    transform-origin: left;
+    transition: transform 0.5s ease;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 992px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .tracking-steps {
+      flex-wrap: wrap;
+    }
+    
+    .tracking-step {
+      flex: 0 0 50%;
+      margin-bottom: 40px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .page-header h1 {
+      font-size: 2.3rem;
+      padding: 12px 30px;
+    }
+    
+    .order-info {
+      grid-template-columns: 1fr;
+    }
+    
+    .tracking-step {
+      flex: 0 0 100%;
+      margin-bottom: 40px;
+    }
+    
+    .tracking-steps::before,
+    .step-connector {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .page-header h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<!-- Floating decorative elements -->
+<div class="floating"></div>
+<div class="floating"></div>
+
+<div class="page-header">
+  <h1>🍬 My Sweet Orders 🚚</h1>
+</div>
+
+<div class="order-container">
+  {% for products, order in data %}
+  <div class="order-card">
+    <div class="order-header">
+      <h2><i class="fas fa-receipt"></i> Order #{{ order.id }}</h2>
+    </div>
+    
+    <div class="order-body">
+      <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+          <div class="product-image">
+            <img src="{% static product.product_image.url %}" alt="{{ product.name }}">
+          </div>
+          <div class="product-details">
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-description">{{ product.description }}</div>
+            <div class="product-price">${{ product.price }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      
+      <div class="order-info">
+        <div class="info-card">
+          <h3><i class="fas fa-map-marker-alt"></i> Shipment Address</h3>
+          <p>{{ order.address }}</p>
+        </div>
+        
+        <div class="info-card">
+          <h3><i class="fas fa-truck"></i> Order Status</h3>
+          <p>
+            {% if order.status == 'Pending' %}
+            <span class="status-badge status-pending">{{ order.status }}</span>
+            {% elif order.status == 'Order Confirmed' %}
+            <span class="status-badge status-confirmed">{{ order.status }}</span>
+            {% elif order.status == 'Out for Delivery' %}
+            <span class="status-badge status-out">{{ order.status }}</span>
+            {% else %}
+            <span class="status-badge status-delivered">{{ order.status }}</span>
+            {% endif %}
+          </p>
+          <a href="{% url 'download-invoice' order.id product.id %}" class="invoice-btn">
+            <i class="fas fa-download"></i> Download Invoice
+          </a>
+        </div>
+      </div>
+      
+      <div class="tracking-container">
+        <h3 class="tracking-title">Your Sweet Journey 🍭</h3>
+        <div class="tracking-steps">
+          <div class="step-connector" style="transform: scaleX(
+            {% if order.status == 'Pending' %}0.25
+            {% elif order.status == 'Order Confirmed' %}0.5
+            {% elif order.status == 'Out for Delivery' %}0.75
+            {% else %}1{% endif %}
+          );"></div>
+          
+          <div class="tracking-step {% if order.status != 'Pending' %}step-active{% endif %}">
+            <div class="step-icon">
+              <i class="fas fa-spinner"></i>
+            </div>
+            <div class="step-text">Order Pending</div>
+          </div>
+          
+          <div class="tracking-step {% if order.status == 'Order Confirmed' or order.status == 'Out for Delivery' or order.status == 'Delivered' %}step-active{% endif %}">
+            <div class="step-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="step-text">Order Confirmed</div>
+          </div>
+          
+          <div class="tracking-step {% if order.status == 'Out for Delivery' or order.status == 'Delivered' %}step-active{% endif %}">
+            <div class="step-icon">
+              <i class="fas fa-truck"></i>
+            </div>
+            <div class="step-text">On the Way</div>
+          </div>
+          
+          <div class="tracking-step {% if order.status == 'Delivered' %}step-active{% endif %}">
+            <div class="step-icon">
+              <i class="fas fa-home"></i>
+            </div>
+            <div class="step-text">Delivered</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+  // Add animation to step icons
+  const stepIcons = document.querySelectorAll('.step-icon');
+  stepIcons.forEach(icon => {
+    icon.addEventListener('mouseenter', () => {
+      icon.style.transform = 'scale(1.15) rotate(10deg)';
+      icon.style.transition = 'all 0.3s ease';
+    });
+    
+    icon.addEventListener('mouseleave', () => {
+      icon.style.transform = 'scale(1) rotate(0deg)';
+    });
+  });
+  
+  // Add floating effect to order cards
+  const orderCards = document.querySelectorAll('.order-card');
+  orderCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const xAxis = (card.offsetWidth / 2 - e.offsetX) / 25;
+      const yAxis = (card.offsetHeight / 2 - e.offsetY) / 25;
+      card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateY(-10px)`;
+    });
+    
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'none';
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'all 0.5s ease';
+      card.style.transform = 'rotateY(0deg) rotateX(0deg) translateY(-10px)';
+    });
+  });
+</script>
+
+{% endblock content %}

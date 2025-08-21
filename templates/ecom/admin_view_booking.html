@@ -1,0 +1,173 @@
+{% extends 'ecom/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style media="screen">
+    body {
+      background-color: #faf5ff;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+    
+    a:link {
+      text-decoration: none;
+      color: #ff85a2;
+    }
+    
+    .panel-heading {
+      background: linear-gradient(135deg, #a2d2ff 0%, #ffafcc 100%) !important;
+      border-radius: 15px 15px 0 0 !important;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      font-size: 1.3em;
+    }
+    
+    .panel-title:before {
+      content: "📦 ";
+    }
+    
+    .panel {
+      border-radius: 15px !important;
+      border: none !important;
+      box-shadow: 0 8px 20px rgba(162, 210, 255, 0.3);
+      overflow: hidden;
+    }
+    
+    .panel-danger {
+      border-color: #ffd6e0 !important;
+    }
+    
+    .table {
+      border-radius: 0 0 15px 15px !important;
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+    
+    th {
+      background-color: #c1e3ff !important;
+      color: #5a6d80 !important;
+      font-size: 1.1em;
+      position: relative;
+    }
+    
+    th:nth-child(1):before { content: "👤 "; }
+    th:nth-child(2):before { content: "📱 "; }
+    th:nth-child(3):before { content: "🏠 "; }
+    th:nth-child(4):before { content: "🛍️ "; }
+    th:nth-child(5):before { content: "🖼️ "; }
+    th:nth-child(6):before { content: "📊 "; }
+    th:nth-child(7):before { content: "⚡ "; }
+    
+    tr:nth-child(even) {
+      background-color: #fff9fc;
+    }
+    
+    tr:nth-child(odd) {
+      background-color: #f0f9ff;
+    }
+    
+    tr:hover {
+      background-color: #ffe5f2 !important;
+      transform: scale(1.01);
+      transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+      background-color: #a2d2ff !important;
+      border-color: #89c2ff !important;
+    }
+    
+    .btn-danger {
+      background-color: #ffb3c6 !important;
+      border-color: #ff8fab !important;
+    }
+    
+    .btn-xs {
+      border-radius: 50% !important;
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 3px;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-xs:hover {
+      transform: scale(1.1);
+    }
+    
+    .product-img {
+      border-radius: 10px;
+      border: 2px solid #ffd6e0;
+      transition: all 0.3s ease;
+    }
+    
+    .product-img:hover {
+      transform: scale(1.1);
+      border-color: #a2d2ff;
+    }
+    
+    .status-pending {
+      color: #ff9e4f;
+      font-weight: bold;
+    }
+    
+    .status-completed {
+      color: #3eb54d;
+      font-weight: bold;
+    }
+    
+    .container {
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<div class="container">
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h6 class="panel-title">Total Orders</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Contact</th>
+          <th>Shipping Address</th>
+          <th>Product</th>
+          <th>Image</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <!-- p for product, c for customer-->
+      {% for product,customer,order in data %}
+      <tr>
+        {% for c in customer %}
+        <td> {{c.get_name}}</td>
+        <td>{{c.mobile}}</td>
+        <td>{{order.address}}</td>
+        {% endfor %}
+        
+        {% for p in product %}
+        <td> {{p.name}}</td>
+        <td> <img src="{% static p.product_image.url %}" alt="Product Image" height="40px" width="40px" class="product-img" /></td>
+        <td class="status-{{order.status|lower}}">{% if order.status == 'Pending' %}⏳{% else %}✅{% endif %} {{order.status}}</td>
+        <td>
+          <a class="btn btn-primary btn-xs" href="{% url 'update-order' order.id %}" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+          <a class="btn btn-danger btn-xs" href="{% url 'delete-order' order.id %}" title="Delete"><span class="glyphicon glyphicon-trash"></span></a>
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,291 @@
+{% extends 'ecom/admin_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffdde1, #fbc2eb, #a2d2ff, #b5deff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: #5a5a7a;
+            padding: 40px 20px;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .update-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(158, 118, 173, 0.2);
+            overflow: hidden;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+        }
+        
+        .update-container::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffb6c1, #ffcce0);
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        .update-container::after {
+            content: "";
+            position: absolute;
+            bottom: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        .note {
+            text-align: center;
+            height: 100px;
+            background: linear-gradient(45deg, #ff7aa2, #a1c4fd);
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .note::after {
+            content: "✏️";
+            position: absolute;
+            right: 30px;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+        
+        .form-content {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 30px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #ff7aa2;
+            font-size: 1.1rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ffd1dc;
+            border-radius: 15px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff7aa2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+        }
+        
+        .form-control:focus {
+            border-color: #a1c4fd;
+            box-shadow: 0 4px 15px rgba(161, 196, 253, 0.3);
+            outline: none;
+        }
+        
+        .btnSubmit {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            display: block;
+            margin: 30px auto 0;
+            width: auto;
+            min-width: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btnSubmit:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.4);
+        }
+        
+        .btnSubmit::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btnSubmit:hover::before {
+            left: 100%;
+        }
+        
+        .floating-emoji {
+            position: absolute;
+            font-size: 1.8rem;
+            z-index: 10;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .emoji-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .emoji-2 { top: 20%; right: 5%; animation-delay: 1s; }
+        .emoji-3 { bottom: 15%; left: 10%; animation-delay: 2s; }
+        .emoji-4 { bottom: 25%; right: 10%; animation-delay: 3s; }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @media (max-width: 576px) {
+            .update-container {
+                width: 95%;
+            }
+            
+            .form-content {
+                padding: 30px 20px;
+            }
+            
+            .note {
+                height: 80px;
+                font-size: 1.3rem;
+            }
+            
+            .btnSubmit {
+                padding: 12px 25px;
+                font-size: 1rem;
+                min-width: 180px;
+            }
+        }
+    </style>
+</head>
+
+<div class="update-container">
+    <!-- Floating emojis -->
+    <div class="floating-emoji emoji-1">📦</div>
+    <div class="floating-emoji emoji-2">✏️</div>
+    <div class="floating-emoji emoji-3">🔄</div>
+    <div class="floating-emoji emoji-4">✅</div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="note">
+            <p>Update Status Of Order 📝</p>
+        </div>
+        <div class="form-content">
+            <div class="form-group">
+                <label for="status"><i class="fas fa-truck"></i> Order Status:</label>
+                {% render_field orderForm.status class="form-control" %}
+            </div>
+            <button type="submit" class="btnSubmit">
+                <i class="fas fa-sync-alt"></i> Update Order Status
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to submit button
+        const btnSubmit = document.querySelector('.btnSubmit');
+        btnSubmit.addEventListener('mouseenter', function() {
+            this.innerHTML = '<i class="fas fa-sync-alt"></i> Updating... ✨';
+        });
+        
+        btnSubmit.addEventListener('mouseleave', function() {
+            this.innerHTML = '<i class="fas fa-sync-alt"></i> Update Order Status';
+        });
+        
+        // Add focus effect to select dropdown
+        const select = document.querySelector('.form-control');
+        select.addEventListener('focus', function() {
+            this.parentElement.querySelector('label').style.color = '#a1c4fd';
+        });
+        
+        select.addEventListener('blur', function() {
+            this.parentElement.querySelector('label').style.color = '#ff7aa2';
+        });
+        
+        // Add floating emoji effect when submitting
+        btnSubmit.addEventListener('click', function(e) {
+            // Create floating emoji effect
+            for (let i = 0; i < 5; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'floating-emoji';
+                emoji.innerHTML = ['📦', '✏️', '🔄', '✅', '🚚'][i];
+                emoji.style.position = 'absolute';
+                emoji.style.top = btnSubmit.offsetTop + 'px';
+                emoji.style.left = btnSubmit.offsetLeft + 'px';
+                emoji.style.fontSize = '1.5rem';
+                emoji.style.zIndex = '100';
+                emoji.style.animation = 'float 1.5s ease-in-out forwards';
+                
+                document.body.appendChild(emoji);
+                
+                // Random direction
+                const direction = Math.random() > 0.5 ? 1 : -1;
+                const distance = 100 + Math.random() * 100;
+                
+                // Animate
+                setTimeout(() => {
+                    emoji.style.transform = `translate(${direction * distance}px, -${distance}px) rotate(${direction * 360}deg)`;
+                    emoji.style.opacity = '0';
+                }, 10);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    emoji.remove();
+                }, 1500);
+            }
+        });
+    });
+</script>
+
+{% endblock content %}

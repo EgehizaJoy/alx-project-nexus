@@ -1,0 +1,418 @@
+<html>
+{% load static %}
+<head>
+  <title>Sweet Shop 🍬</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+        background-color: #fff9fc;
+        font-family: 'Baloo 2', cursive;
+    }
+
+    #navbar {
+        background: linear-gradient(135deg, #ffafcc 0%, #a2d2ff 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(162, 210, 255, 0.4);
+    }
+
+    .row1 {
+        padding-top: 10px;
+        padding-right: 50px
+    }
+
+    .row2 {
+        padding-bottom: 20px
+    }
+
+  .navbar-input {
+      padding: 11px 16px;
+      border-radius: 25px 0 0 25px;
+      border: 2px solid #c1e3ff;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .navbar-input:focus {
+        border-color: #ffafcc;
+        box-shadow: 0 0 0 3px rgba(255, 175, 204, 0.2);
+    }
+
+    .navbar-button {
+        background: linear-gradient(135deg, #ffd166 0%, #ff9a5a 100%);
+        border: 2px solid #ffd166;
+        border-radius: 0 25px 25px 0;
+        color: white;
+        padding: 0 15px; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+
+    .navbar-button:hover {
+        background: linear-gradient(135deg, #ff9a5a 0%, #ffd166 100%);
+        transform: scale(1.02);
+    }
+
+    .cart-button {
+        background: linear-gradient(135deg, #ff9a5a 0%, #ffd166 100%);
+        box-shadow: 0 4px 10px rgba(255, 154, 90, 0.3);
+        padding: 10px 0;
+        text-align: center;
+        height: 41px;
+        border-radius: 25px;
+        font-weight: 700;
+        width: 120px;
+        display: inline-block;
+        color: white;
+        text-decoration: none;
+        border: none;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .cart-button:hover {
+        text-decoration: none;
+        color: white;
+        cursor: pointer;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(255, 154, 90, 0.4);
+    }
+
+    .cart-svg {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        margin-right: 8px
+    }
+
+    .item-number {
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.3);
+        height: 20px;
+        width: 20px;
+        padding: 0;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        line-height: 20px;
+        margin-left: 10px
+    }
+
+    .upper-links {
+        display: inline-block;
+        padding: 0 15px;
+        line-height: 23px;
+        font-family: 'Baloo 2', cursive;
+        letter-spacing: 0;
+        color: white;
+        border: none;
+        outline: none;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .upper-links:hover {
+        transform: translateY(-2px);
+        text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .links {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .links:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+    .links i {
+        margin-right: 5px;
+    }
+
+    .dropdown-menu {
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(162, 210, 255, 0.3);
+        border: 2px solid #ffd6e0;
+        margin-top: 10px;
+    }
+
+    .profile-links {
+        font-size: 14px;
+        font-family: 'Baloo 2', cursive;
+        border-bottom: 1px solid #ffd6e0;
+        box-sizing: border-box;
+        display: block;
+        padding: 8px 15px;
+        line-height: 23px;
+        color: #5a6d80;
+        transition: all 0.2s ease;
+    }
+
+    .profile-links:hover {
+        background-color: #f0f9ff;
+        color: #ff85a2;
+    }
+
+    .profile-links i {
+        margin-right: 8px;
+        color: #a2d2ff;
+    }
+
+    .largenav {
+        display: none
+    }
+
+    .smallnav {
+        display: block
+    }
+
+    .smallsearch {
+        margin-left: 15px;
+        margin-top: 15px
+    }
+
+    .menu {
+        cursor: pointer
+    }
+
+    footer {
+        padding: 20px 0;
+        background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+        margin: 0px;
+        color: white;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .social-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .social-icon:hover {
+        transform: translateY(-5px) scale(1.1);
+        opacity: 1;
+        text-decoration: none;
+    }
+
+    .facebook {
+        background: linear-gradient(135deg, #3B5998 0%, #4c70ba 100%);
+    }
+
+    .whatsapp {
+        background: linear-gradient(135deg, #25d366 0%, #2fd671 100%);
+    }
+
+    .twitter {
+        background: linear-gradient(135deg, #55ACEE 0%, #7bc1f7 100%);
+    }
+
+    .instagram {
+        background: linear-gradient(135deg, #125688 0%, #962fbf 50%, #d62976 100%);
+    }
+
+    .copyright {
+        text-align: center;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .site-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: white;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .site-title:hover {
+        transform: scale(1.05);
+        text-decoration: none;
+        color: white;
+    }
+
+    .site-title:before {
+        content: "🛍️ ";
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    .dropdown-item {
+        padding: 10px 20px;
+        color: #5a6d80 !important;
+        font-weight: 600;
+        font-family: 'Baloo 2', cursive;
+        border-bottom: 1px solid #ffd6e0;
+    }
+
+    .dropdown-item:hover {
+        background: #f0f9ff;
+        color: #ff85a2 !important;
+    }
+
+    .dropdown-item i {
+        margin-right: 8px;
+        color: #a2d2ff;
+    }
+
+    @media screen and (min-width: 768px) {
+        .largenav {
+            display: block
+        }
+        .smallnav {
+            display: none
+        }
+        .smallsearch {
+            margin: 0px
+        }
+    }
+
+    /* Keep existing content styles */
+    .flex-grow-1 {
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body>
+
+<div id="navbar">
+    <div class="container">
+        <div class="row row1">
+            <ul class="largenav pull-right">
+                {% if request.user.is_authenticated %}
+                    <li class="upper-links"><a class="links" href="/my-order"><i class="fas fa-truck"></i> Track Orders</a></li>
+                    <li class="upper-links"><a class="links" href="/my-profile"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li class="upper-links">
+                      <form id="logout-form" method="POST" action="{% url 'logout' %}" style="display: none;">
+                        {% csrf_token %}
+                      </form>
+                      <a class="links" href="#" id="logout-link">
+                        <span class="emoji">🚪</span> Logout
+                      </a>
+                    </li>
+                {% else %}
+                    <li class="upper-links">
+                        <a class="links dropdown-toggle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown">
+                          <i class="fas fa-user"></i> Login & Sign Up
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="/customerlogin"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                          <li><a class="dropdown-item" href="/customersignup"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                        </ul>
+                    </li>
+                    <li class="upper-links">
+                      <a class="links" href="/adminclick">
+                        <i class="fas fa-lock"></i> Admin
+                      </a>
+                    </li>
+                    <li class="upper-links">
+                      <a class="links" href="/aboutus">
+                        <i class="fas fa-info-circle"></i> About Us
+                      </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="row row2">
+            <div class="col-sm-3">
+                <h2 style="margin:0px;"><a class="site-title" href="/">Sweet Shop</a></h2>
+            </div>
+
+            <div class="navbar-search smallsearch col-sm-7 col-xs-11">
+              <form action="/search" method="get" class="d-flex">
+                <input class="navbar-input flex-grow-1" type="search"
+                       placeholder="🔍 Search for Products, Brands and more"
+                       name="query" id="query">
+                <button class="navbar-button" type="submit">
+                  <svg width="15px" height="15px">
+                    <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467"
+                          fill="white"></path>
+                  </svg>
+                </button>
+              </form>
+            </div>
+
+            <div class="cart1 largenav col-sm-2"> 
+              <a class="cart-button" href="/cart">
+                <svg class="cart-svg" width="16" height="16" viewBox="0 0 16 16">
+                  <path d="M15.32 2.405H4.887C3 2.405 2.46.805 2.46.805L2.257.21C2.208.085 2.083 0 1.946 0H.336C.1 0-.064.24.024.46l.644 1.945L3.11 9.767c.047.137.175.23.32.23h8.418l-.493 1.958H3.768l.002.003c-.017 0-.033-.003-.05-.003-1.06 0-1.92.86-1.92 1.92s.86 1.92 1.92 1.92c.99 0 1.805-.75 1.91-1.712l5.55.076c.12.922.91 1.636 1.867 1.636 1.04 0 1.885-.844 1.885-1.885 0-.866-.584-1.593-1.38-1.814l2.423-8.832c.12-.433-.206-.86-.655-.86" fill="white"></path>
+                </svg> 
+                Cart <span class="item-number">{{ product_count_in_cart }}</span> 
+              </a> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex-grow-1">
+    {% block content %}
+    {% endblock content %}
+</div>
+
+<footer>
+  <div class="social-icons">
+    <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="#" class="social-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
+    <a href="#" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+    <a href="#" class="social-icon twitter"><i class="fab fa-twitter"></i></a>
+  </div>
+  
+  <div class="copyright">
+    <p>🌸 Sweet Shop - Ecommerce Site in Python using Django Framework<br>
+    &copy; 2023 Developed With ❤️</p>
+  </div>
+</footer>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const logoutLink = document.getElementById('logout-link');
+    const logoutForm = document.getElementById('logout-form');
+
+    if (logoutLink && logoutForm) {
+      logoutLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        logoutForm.submit();
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

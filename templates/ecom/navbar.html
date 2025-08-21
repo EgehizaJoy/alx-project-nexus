@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whimsical Pastel Navbar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #ffdde1, #fbc2eb, #a2d2ff, #b5deff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+            color: #5a5a7a;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(158, 118, 173, 0.2);
+            padding: 15px 25px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        
+        .navbar::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffb6c1, #ffcce0);
+            z-index: -1;
+            opacity: 0.15;
+            animation: floatOrb 8s ease-in-out infinite;
+        }
+        
+        .navbar::after {
+            content: "";
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+            z-index: -1;
+            opacity: 0.15;
+            animation: floatOrb 10s ease-in-out infinite reverse;
+        }
+        
+        @keyframes floatOrb {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+        
+        .row1, .row2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .row1 {
+            padding: 10px 0;
+            border-bottom: 2px dashed rgba(255, 182, 193, 0.4);
+            margin-bottom: 15px;
+        }
+        
+        .row2 {
+            padding: 10px 0;
+        }
+        
+        .largenav {
+            display: flex;
+            list-style: none;
+        }
+        
+        .upper-links {
+            margin: 0 15px;
+            position: relative;
+        }
+        
+        .links {
+            color: #ff7aa2;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .links:hover {
+            background: rgba(255, 182, 193, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 122, 162, 0.2);
+        }
+        
+        .links i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(158, 118, 173, 0.2);
+            padding: 10px 0;
+            min-width: 180px;
+            display: none;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .profile-links {
+            display: block;
+            padding: 12px 20px;
+            color: #5a5a7a;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-bottom: 1px dashed rgba(255, 182, 193, 0.3);
+        }
+        
+        .profile-links:last-child {
+            border-bottom: none;
+        }
+        
+        .profile-links:hover {
+            background: rgba(255, 182, 193, 0.15);
+            padding-left: 25px;
+            color: #ff7aa2;
+        }
+        
+        .profile-links i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .brand {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            color: #ff7aa2;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .brand span {
+            background: linear-gradient(45deg, #ff7aa2, #a1c4fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .navbar-search {
+            flex-grow: 1;
+            margin: 0 30px;
+        }
+        
+        .navbar-form {
+            display: flex;
+            position: relative;
+        }
+        
+        .navbar-input {
+            flex-grow: 1;
+            padding: 14px 20px;
+            border-radius: 50px 0 0 50px;
+            border: 2px solid #ffd1dc;
+            outline: none;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .navbar-input:focus {
+            border-color: #a1c4fd;
+            box-shadow: 0 4px 15px rgba(161, 196, 253, 0.3);
+        }
+        
+        .navbar-button {
+            background: linear-gradient(45deg, #ffb6c1, #a1c4fd);
+            border: none;
+            border-radius: 0 50px 50px 0;
+            color: white;
+            padding: 0 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 122, 162, 0.3);
+        }
+        
+        .navbar-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 122, 162, 0.4);
+        }
+        
+        .cart-button {
+            background: linear-gradient(45deg, #ffb6c1, #a1c4fd);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            padding: 12px 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 122, 162, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        
+        .cart-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 122, 162, 0.4);
+        }
+        
+        .cart-svg {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .item-number {
+            background: white;
+            color: #ff7aa2;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            font-weight: 700;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating-emoji {
+            position: absolute;
+            font-size: 1.5rem;
+            z-index: 10;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .emoji-1 { top: 10px; left: 30px; animation-delay: 0s; }
+        .emoji-2 { top: 15px; right: 40px; animation-delay: 0.8s; }
+        .emoji-3 { bottom: 10px; left: 50px; animation-delay: 1.6s; }
+        .emoji-4 { bottom: 15px; right: 60px; animation-delay: 2.4s; }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .content {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(158, 118, 173, 0.15);
+            text-align: center;
+        }
+        
+        .content h1 {
+            color: #ff7aa2;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .content p {
+            color: #6a6a8e;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .feature {
+            background: rgba(255, 240, 245, 0.7);
+            border-radius: 20px;
+            padding: 25px;
+            width: 250px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border: 2px solid rgba(255, 182, 193, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(255, 122, 162, 0.25);
+        }
+        
+        .feature i {
+            font-size: 2.5rem;
+            color: #ff7aa2;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ffb6c1, #a1c4fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .feature h3 {
+            color: #ff7aa2;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .feature p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+        
+        @media (max-width: 992px) {
+            .row1, .row2 {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .navbar-search {
+                margin: 15px 0;
+            }
+            
+            .largenav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .upper-links {
+                margin: 5px 10px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 15px;
+            }
+            
+            .brand {
+                font-size: 24px;
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+            
+            .navbar-input {
+                padding: 12px 15px;
+            }
+            
+            .cart-button {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Floating emojis -->
+        <div class="floating-emoji emoji-1">🌸</div>
+        <div class="floating-emoji emoji-2">✨</div>
+        <div class="floating-emoji emoji-3">🛍️</div>
+        <div class="floating-emoji emoji-4">💖</div>
+        
+        <nav class="navbar">
+            <div class="row row1">
+                <ul class="largenav">
+                    <li class="upper-links dropdown">
+                        <a class="links" href="">
+                            <i class="fas fa-user"></i> Login & Sign Up ✨
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="profile-li">
+                                <a class="profile-links" href="/customerlogin">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                </a>
+                            </li>
+                            <li class="profile-li">
+                                <a class="profile-links" href="/customersignup">
+                                    <i class="fas fa-user-plus"></i> Sign Up
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="upper-links">
+                        <a class="links" href="/adminclick">
+                            <i class="fas fa-crown"></i> Admin 👑
+                        </a>
+                    </li>
+                    
+                    <li class="upper-links">
+                        <a class="links" href="/aboutus">
+                            <i class="fas fa-info-circle"></i> About Us ❤️
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="row row2">
+                <div class="col-sm-3">
+                    <a class="brand" href="/">
+                        <span>Ecommerce</span> 🛍️
+                    </a>
+                </div>
+                
+                <div class="navbar-search">
+                    <form action="/search" method="get">
+                        <div class="navbar-form">
+                            <input class="navbar-input" type="search" placeholder="Search for Products, Brands and more 🌟" name="query" id="query">
+                            <button class="navbar-button" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="cart1 largenav">
+                    <a class="cart-button" href="/cart">
+                        <i class="fas fa-shopping-cart cart-svg"></i> Cart
+                        <span class="item-number">3</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="content">
+            <h1>Welcome to Our Whimsical Store! ✨</h1>
+            <p>Discover a magical shopping experience with our pastel-themed e-commerce platform. Find everything you need with a sprinkle of joy and a dash of cuteness! 🌈</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h3>Fast Delivery 🚚</h3>
+                    <p>Get your products delivered with unicorn speed!</p>
+                </div>
+                
+                <div class="feature">
+                    <i class="fas fa-gift"></i>
+                    <h3>Special Offers 🎁</h3>
+                    <p>Exclusive deals just for our lovely customers!</p>
+                </div>
+                
+                <div class="feature">
+                    <i class="fas fa-star"></i>
+                    <h3>Quality Products 🌟</h3>
+                    <p>Only the best items for our magical shoppers!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effect to navbar links
+            const links = document.querySelectorAll('.links');
+            links.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+                
+                link.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Add animation to the cart button
+            const cartButton = document.querySelector('.cart-button');
+            cartButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Create floating emoji effect
+                for (let i = 0; i < 5; i++) {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'floating-emoji';
+                    emoji.innerHTML = '🛍️';
+                    emoji.style.position = 'absolute';
+                    emoji.style.top = cartButton.offsetTop + 'px';
+                    emoji.style.left = cartButton.offsetLeft + 'px';
+                    emoji.style.fontSize = '1.5rem';
+                    emoji.style.zIndex = '100';
+                    emoji.style.animation = 'float 1.5s ease-in-out forwards';
+                    
+                    document.body.appendChild(emoji);
+                    
+                    // Random direction
+                    const direction = Math.random() > 0.5 ? 1 : -1;
+                    const distance = 100 + Math.random() * 100;
+                    
+                    // Animate
+                    setTimeout(() => {
+                        emoji.style.transform = `translate(${direction * distance}px, -${distance}px) rotate(${direction * 360}deg)`;
+                        emoji.style.opacity = '0';
+                    }, 10);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        emoji.remove();
+                    }, 1500);
+                }
+                
+                // Navigate to cart after animation
+                setTimeout(() => {
+                    window.location.href = cartButton.href;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+{% extends 'ecom/admin_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<head>
+  <style media="screen">
+    body {
+      background-color: #faf5ff;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+    
+    a:link {
+      text-decoration: none;
+      color: #ff85a2;
+    }
+    
+    .note {
+      text-align: center;
+      height: 80px;
+      background: linear-gradient(135deg, #a2d2ff 0%, #ffafcc 100%);
+      color: white;
+      font-weight: bold;
+      line-height: 80px;
+      border-radius: 15px 15px 0 0;
+      font-size: 1.5em;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .note:before {
+      content: "✨🛍️✨";
+      position: absolute;
+      opacity: 0.2;
+      font-size: 3em;
+      right: 20px;
+      top: -10px;
+    }
+    
+    .note p:before {
+      content: "✏️ ";
+    }
+    
+    .form-content {
+      padding: 5%;
+      border: 2px solid #ffd6e0;
+      margin-bottom: 2%;
+      border-radius: 0 0 15px 15px;
+      background-color: #fff9fc;
+      box-shadow: 0 5px 15px rgba(162, 210, 255, 0.2);
+    }
+    
+    .form-control {
+      border-radius: 15px !important;
+      border: 2px solid #c1e3ff;
+      padding: 15px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      background-color: #fff;
+    }
+    
+    .form-control:focus {
+      border-color: #ffafcc;
+      box-shadow: 0 0 0 0.2rem rgba(255, 175, 204, 0.25);
+      transform: scale(1.02);
+    }
+    
+    .btnSubmit {
+      border: none;
+      border-radius: 15px;
+      padding: 12px 25px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ffafcc 0%, #a2d2ff 100%);
+      color: white;
+      font-weight: bold;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 30px auto 0;
+      box-shadow: 0 4px 10px rgba(162, 210, 255, 0.4);
+      width: auto;
+      min-width: 250px;
+    }
+    
+    .btnSubmit:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 15px rgba(255, 175, 204, 0.5);
+    }
+    
+    .btnSubmit:before {
+      content: "🔄 ";
+    }
+    
+    .form-group label {
+      color: #5a6d80;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    
+    .form-group label:before {
+      content: "🌸 ";
+      color: #ff85a2;
+    }
+    
+    .row {
+      margin: 0 -15px;
+    }
+    
+    .col-md-6 {
+      padding: 0 15px;
+    }
+    
+    /* Special styling for file upload */
+    input[type="file"] {
+      padding: 10px;
+      background: #f0f9ff;
+      border-radius: 15px;
+      border: 2px dashed #a2d2ff;
+    }
+    
+    input[type="file"]:focus {
+      border-color: #ffafcc;
+      background: #ffe5f2;
+    }
+  </style>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<br><br>
+<!------ update page for product by admin ---------->
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="container register-form">
+    <div class="form">
+      <div class="note">
+        <p>Update Product Details</p>
+      </div>
+      <div class="form-content">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Product Name</label>
+              {% render_field productForm.name class="form-control" placeholder="🍬 Product Name" %}
+            </div>
+            <div class="form-group">
+              <label>Product Description</label>
+              {% render_field productForm.description class="form-control" placeholder="📝 Description" rows="4" %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Product Price</label>
+              {% render_field productForm.price class="form-control" placeholder="💰 Price" %}
+            </div>
+            <div class="form-group">
+              <label>Product Image</label>
+              {% render_field productForm.product_image class="form-control" %}
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btnSubmit">Update Product Details</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock content %}

@@ -1,0 +1,8 @@
+{% extends 'ecom/homebase.html' %}
+{% block content %}
+  <h1>Test Logout</h1>
+  <form method="POST" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+  </form>
+{% endblock %}

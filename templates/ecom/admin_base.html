@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <title>💼 Admin Panel - Ecommerce</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <style type="text/css">
+    :root {
+      --pastel-blue: #a8d8ff;
+      --pastel-blue-dark: #7bbbe6;
+      --text-dark: #1f3a56;
+    }
+
+    body {
+      background-color: var(--pastel-blue);
+      font-family: 'Segoe UI', sans-serif;
+      color: var(--text-dark);
+    }
+
+    .bs-example {
+      margin: 0px;
+    }
+
+    .navbar {
+      background: var(--pastel-blue-dark) !important;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text-dark) !important;
+    }
+
+    .navbar-nav .nav-link {
+      color: var(--text-dark) !important;
+      font-weight: 500;
+    }
+
+    .navbar-nav .nav-link:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background-color: var(--pastel-blue-dark);
+      padding: 20px;
+      margin-top: 50px;
+    }
+
+    footer .fa {
+      font-size: 23px;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+      border-radius: 50%;
+      margin: 5px 2px;
+      transition: 0.3s;
+    }
+
+    footer .fa:hover {
+      opacity: 0.7;
+    }
+
+    .fa-facebook {
+      background: #3B5998;
+      color: white;
+    }
+
+    .fa-whatsapp {
+      background: #25d366;
+      color: white;
+    }
+
+    .fa-twitter {
+      background: #55ACEE;
+      color: white;
+    }
+
+    .fa-instagram {
+      background: #E1306C;
+      color: white;
+    }
+
+    p {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bs-example">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+      <a href="/" class="navbar-brand">💼 Admin Panel</a>
+      <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+        <div class="navbar-nav">
+          <a href="/view-customer" class="nav-item nav-link">👤 Customers</a>
+          <a href="/admin-view-booking" class="nav-item nav-link">📦 View Orders</a>
+          <a href="/admin-products" class="nav-item nav-link">🛒 Manage Products</a>
+        </div>
+
+        <div class="navbar-nav navbar-right">
+          <!--<a href="/logout" class="nav-item nav-link">🚪 Logout</a> -->
+          <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link nav-link" style="display:inline; padding:0;">
+                🚪 Logout
+            </button>
+        </form>
+
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- content start-->
+  {% block content %}
+  {% endblock content %}
+  <!-- content end-->
+
+  <br><br><br><br><br><br><br><br>
+
+  <footer>
+    <p>
+      <a href="#" class="fa fa-facebook"></a>
+      <a href="#" class="fa fa-whatsapp"></a>
+      <a href="#" class="fa fa-instagram"></a>
+      <a href="#" class="fa fa-twitter"></a>
+    </p>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 text-center">
+          <p style="color:#ffffff;">© 2025 Developed with 💙</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

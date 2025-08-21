@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+{% load widget_tweaks %}
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Login | Whimsy Shop</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #e0f7fa;
+      background: linear-gradient(135deg, #e0f7fa 0%, #bbdefb 50%, #e3f2fd 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Hide navbar and footer without removing them */
+    .hidden-section {
+      display: none;
+    }
+
+    /* Floating elements for whimsical effect */
+    .cloud {
+      position: absolute;
+      z-index: 0;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cloud:nth-child(1) {
+      width: 120px;
+      height: 40px;
+      top: 10%;
+      left: 5%;
+      animation: float 15s infinite linear;
+    }
+
+    .cloud:nth-child(2) {
+      width: 80px;
+      height: 30px;
+      top: 25%;
+      right: 10%;
+      animation: float 18s infinite linear reverse;
+    }
+
+    .cloud:nth-child(3) {
+      width: 100px;
+      height: 35px;
+      bottom: 20%;
+      left: 15%;
+      animation: float 12s infinite linear;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(2px);
+      z-index: 0;
+    }
+
+    .bubble:nth-child(4) {
+      width: 30px;
+      height: 30px;
+      top: 20%;
+      right: 20%;
+      animation: float 8s infinite linear;
+    }
+
+    .bubble:nth-child(5) {
+      width: 20px;
+      height: 20px;
+      bottom: 15%;
+      right: 25%;
+      animation: float 10s infinite linear reverse;
+    }
+
+    .bubble:nth-child(6) {
+      width: 25px;
+      height: 25px;
+      top: 40%;
+      left: 20%;
+      animation: float 7s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); }
+      25% { transform: translateY(-20px) translateX(10px); }
+      50% { transform: translateY(0) translateX(20px); }
+      75% { transform: translateY(20px) translateX(10px); }
+      100% { transform: translateY(0) translateX(0); }
+    }
+
+    /* Main login container */
+    .login-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 40px 30px;
+      box-shadow: 0 15px 35px rgba(129, 212, 250, 0.3);
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+
+    .login-container:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(129, 212, 250, 0.4);
+    }
+
+    .login-header {
+      margin-bottom: 30px;
+    }
+
+    .login-header h1 {
+      color: #5c9bd1;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      font-weight: 600;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-header p {
+      color: #88c1e4;
+      font-size: 1.1rem;
+    }
+
+    .login-icon {
+      font-size: 4rem;
+      color: #90caf9;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #90caf9;
+      font-size: 1.2rem;
+      z-index: 2;
+    }
+
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 15px 15px 15px 50px;
+      border: 2px solid #e3f2fd;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      color: #5c9bd1;
+      outline: none;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-container input[type="text"]:focus,
+    .login-container input[type="password"]:focus {
+      border-color: #90caf9;
+      box-shadow: 0 0 0 3px rgba(144, 202, 249, 0.3);
+    }
+
+    .login-container input[type="text"]::placeholder,
+    .login-container input[type="password"]::placeholder {
+      color: #bbdefb;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #90caf9 0%, #64b5f6 100%);
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(100, 181, 246, 0.4);
+      margin-top: 10px;
+    }
+
+    .login-btn:hover {
+      background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(100, 181, 246, 0.6);
+    }
+
+    .login-btn:active {
+      transform: translateY(1px);
+    }
+
+    .forgot-link {
+      display: block;
+      margin-top: 20px;
+      color: #90caf9;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .forgot-link:hover {
+      color: #64b5f6;
+      text-decoration: underline;
+    }
+
+    .decoration {
+      position: absolute;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      color: #ffd54f;
+      font-size: 1.5rem;
+      animation: twinkle 3s infinite;
+    }
+
+    .star:nth-child(1) {
+      top: 10%;
+      left: 15%;
+      animation-delay: 0s;
+    }
+
+    .star:nth-child(2) {
+      top: 20%;
+      right: 10%;
+      animation-delay: 1s;
+    }
+
+    .star:nth-child(3) {
+      bottom: 15%;
+      left: 20%;
+      animation-delay: 2s;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+      100% { opacity: 0.2; transform: scale(0.8); }
+    }
+
+    .copyright {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      color: #90caf9;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hidden navbar and footer -->
+  <div class="hidden-section">
+    {% include "ecom/navbar.html" %}
+  </div>
+  
+  <!-- Whimsical decorative elements -->
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="star"><i class="fas fa-star"></i></div>
+  <div class="star"><i class="fas fa-star"></i></div>
+  <div class="star"><i class="fas fa-star"></i></div>
+  
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-icon">
+        <i class="fas fa-lock"></i>
+      </div>
+      <h1>Admin Login</h1>
+      <p>Welcome back! Please enter your credentials</p>
+    </div>
+    
+    <form class="login-form" method="post">
+      {% csrf_token %}
+      
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        {% render_field form.username class="form-control" placeholder="Username" autocomplete="off" %}
+      </div>
+      
+      <div class="input-group">
+        <i class="fas fa-key"></i>
+        {% render_field form.password class="form-control" placeholder="Password" %}
+      </div>
+      
+      <input type="submit" class="login-btn" value="Login">
+      
+      <a href="#" class="forgot-link">Forgot your password?</a>
+    </form>
+  </div>
+  
+  <div class="copyright">
+    &copy; 2023 Whimsy Shop Admin Portal
+  </div>
+  
+  <!-- Hidden footer -->
+  <div class="hidden-section">
+    {% include "ecom/footer.html" %}
+  </div>
+</body>
+</html>

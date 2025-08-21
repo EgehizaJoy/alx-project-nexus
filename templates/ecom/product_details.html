@@ -1,0 +1,450 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f8fbff;
+            color: #4a5a7a;
+        }
+        
+        .product-detail-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #6c7a93;
+        }
+        
+        .breadcrumb a {
+            color: #4a8fe7;
+            text-decoration: none;
+        }
+        
+        .breadcrumb span {
+            margin: 0 8px;
+        }
+        
+        .product-main {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .product-gallery {
+            flex: 1;
+            max-width: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .main-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(162, 210, 255, 0.2);
+            border: 1px solid #c1e3ff;
+            object-fit: contain;
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-title {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: #2c3e5d;
+        }
+        
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4a8fe7;
+            margin-bottom: 20px;
+        }
+        
+        .product-description {
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #5a6a8a;
+        }
+        
+        .add-to-cart-btn {
+            background: linear-gradient(45deg, #4a8fe7, #6ba8f0);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .add-to-cart-btn i {
+            margin-right: 10px;
+        }
+        
+        .add-to-cart-btn:hover {
+            background: linear-gradient(45deg, #3a7ed7, #5b98e0);
+        }
+        
+        .details-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(162, 210, 255, 0.2);
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #c1e3ff;
+        }
+        
+        .details-header {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #2c3e5d;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c1e3ff;
+        }
+        
+        .features-section, .specs-section, .in-the-box-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #4a8fe7;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .feature-icon {
+            color: #4a8fe7;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            min-width: 24px;
+        }
+        
+        .feature-content h4 {
+            margin-bottom: 5px;
+            color: #2c3e5d;
+        }
+        
+        .feature-content p {
+            color: #5a6a8a;
+            line-height: 1.5;
+        }
+        
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .specs-table tr {
+            border-bottom: 1px solid #e1ecff;
+        }
+        
+        .specs-table td {
+            padding: 12px 15px;
+        }
+        
+        .spec-name {
+            font-weight: 600;
+            color: #2c3e5d;
+            width: 30%;
+        }
+        
+        .spec-value {
+            color: #5a6a8a;
+        }
+        
+        .in-the-box-list {
+            list-style-type: none;
+        }
+        
+        .in-the-box-list li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #e1ecff;
+        }
+        
+        .in-the-box-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .box-icon {
+            color: #4a8fe7;
+            margin-right: 15px;
+            min-width: 24px;
+        }
+        
+        .related-products {
+            margin-top: 50px;
+        }
+        
+        .related-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #2c3e5d;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(162, 210, 255, 0.2);
+            border: 1px solid #c1e3ff;
+            transition: transform 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            padding: 15px;
+            background: #f8fbff;
+        }
+        
+        .product-card-info {
+            padding: 20px;
+        }
+        
+        .product-card-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #2c3e5d;
+        }
+        
+        .product-card-price {
+            font-weight: 700;
+            color: #4a8fe7;
+        }
+        
+        @media (max-width: 992px) {
+            .product-main {
+                flex-direction: column;
+            }
+            
+            .product-gallery {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .product-title {
+                font-size: 1.8rem;
+            }
+            
+            .product-price {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<div class="product-detail-container">
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb">
+        <a href="{% url 'customer-home' %}">Home</a> <span>/</span>
+        {% if product.category %}
+        <a href="#">{{ product.category }}</a> <span>/</span>
+        {% endif %}
+        <span>{{ product.name }}</span>
+    </div>
+    
+    <!-- Main Product Section -->
+    <div class="product-main">
+        <div class="product-gallery">
+            <img src="{% static product.product_image.url %}" alt="{{ product.name }}" class="main-image">
+        </div>
+        
+        <div class="product-info">
+            <h1 class="product-title">{{ product.name }}</h1>
+            <div class="product-price">${{ product.price }}</div>
+            <p class="product-description">
+                {{ product.description }}
+            </p>
+            
+            <button class="add-to-cart-btn" data-id="{{ product.id }}">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+        </div>
+    </div>
+    
+    <!-- Detailed Information Sections -->
+    <!-- 
+    These sections are currently static. If you want to make them dynamic,
+    you'll need to add these fields to your Product model.
+    For now, I'll keep them as placeholders.
+    -->
+    <div class="details-container">
+        <h2 class="details-header">Product Details</h2>
+        
+        <!-- Key Features Section (Static for now) -->
+        <div class="features-section">
+            <h3 class="section-title">Product Highlights</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="feature-content">
+                        <p>High-quality product designed for your needs</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="feature-content">
+                        <p>Durable construction for long-lasting use</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="feature-content">
+                        <p>Designed with user experience in mind</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="related-products">
+        <h2 class="related-title">You May Also Like</h2>
+        <div class="products-grid">
+            {% for related_product in related_products %}
+            <a href="{% url 'product_detail' related_product.id %}" class="product-card">
+                <img src="{% static related_product.product_image.url %}" alt="{{ related_product.name }}" class="product-card-img">
+                <div class="product-card-info">
+                    <h3 class="product-card-title">{{ related_product.name }}</h3>
+                    <div class="product-card-price">${{ related_product.price }}</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+// Add to cart functionality for the product detail page
+document.addEventListener("DOMContentLoaded", function() {
+    const addToCartBtn = document.querySelector(".add-to-cart-btn");
+    
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener("click", function() {
+            let productId = this.getAttribute('data-id');
+
+            fetch("{% url 'add-to-cart-ajax' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "product_id=" + productId
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network error');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Update cart count in the header
+                    const cartCountElements = document.querySelectorAll('.item-number');
+                    cartCountElements.forEach(el => {
+                        el.textContent = data.cart_count;
+                    });
+                    
+                    // Show notification
+                    showNotification(data.message);
+                } else {
+                    showNotification("Error: " + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification("Failed to add to cart. Please try again.", 'error');
+            });
+        });
+    }
+
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.padding = '10px 20px';
+        notification.style.borderRadius = '5px';
+        notification.style.color = 'white';
+        notification.style.zIndex = '1000';
+        notification.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+        
+        if (type === 'success') {
+            notification.style.background = '#4CAF50';
+        } else {
+            notification.style.background = '#F44336';
+        }
+        
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+});
+</script>
+
+{% endblock content %}

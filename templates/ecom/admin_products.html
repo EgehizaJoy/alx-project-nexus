@@ -1,0 +1,201 @@
+{% extends 'ecom/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style media="screen">
+    body {
+      background-color: #faf5ff;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+    
+    a:link {
+      text-decoration: none;
+      color: #ff85a2;
+    }
+    
+    a:hover {
+      color: #ff6b9d;
+    }
+    
+    .panel-heading {
+      background: linear-gradient(135deg, #a2d2ff 0%, #ffafcc 100%) !important;
+      border-radius: 15px 15px 0 0 !important;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .panel {
+      border-radius: 15px !important;
+      border: none !important;
+      box-shadow: 0 8px 20px rgba(162, 210, 255, 0.3);
+    }
+    
+    .panel-danger {
+      border-color: #ffd6e0 !important;
+    }
+    
+    .table {
+      border-radius: 0 0 15px 15px !important;
+      overflow: hidden;
+    }
+    
+    th {
+      background-color: #c1e3ff !important;
+      color: #5a6d80 !important;
+      font-size: 1.1em;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #fff9fc;
+    }
+    
+    tr:nth-child(odd) {
+      background-color: #f0f9ff;
+    }
+    
+    tr:hover {
+      background-color: #ffe5f2 !important;
+      transform: scale(1.01);
+      transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+      background-color: #a2d2ff !important;
+      border-color: #89c2ff !important;
+    }
+    
+    .btn-danger {
+      background-color: #ffb3c6 !important;
+      border-color: #ff8fab !important;
+    }
+    
+    .btn-xs {
+      border-radius: 50% !important;
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .float {
+      position: fixed;
+      width: 70px;
+      height: 70px;
+      bottom: 60px;
+      right: 60px;
+      background: linear-gradient(135deg, #ffafcc 0%, #a2d2ff 100%);
+      color: #FFF;
+      border-radius: 50%;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(162, 210, 255, 0.6);
+      font-size: 24px;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    
+    .float:hover {
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 8px 20px rgba(255, 175, 204, 0.8);
+    }
+    
+    .my-float {
+      margin-top: 18px;
+    }
+    
+    .product-img {
+      border-radius: 10px;
+      border: 3px solid #ffd6e0;
+      transition: all 0.3s ease;
+    }
+    
+    .product-img:hover {
+      transform: scale(1.1);
+      border-color: #a2d2ff;
+    }
+    
+    .no-products {
+      text-align: center;
+      padding: 50px;
+      color: #ff85a2;
+      font-size: 2em;
+    }
+    
+    .panel-title:before {
+      content: "📦 ";
+    }
+    
+    th:nth-child(1):before {
+      content: "🍬 ";
+    }
+    
+    th:nth-child(2):before {
+      content: "🖼️ ";
+    }
+    
+    th:nth-child(3):before {
+      content: "💰 ";
+    }
+    
+    th:nth-child(4):before {
+      content: "📝 ";
+    }
+    
+    th:nth-child(5):before {
+      content: "⚡ ";
+    }
+  </style>
+</head>
+
+<div class="container">
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h6 class="panel-title">Total Products</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Image</th>
+          <th>Price</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      {% for p in products %}
+        {% if p %}
+        <tr>
+          <td> {{p.name}}</td>
+          <td> <img src="{% static p.product_image.url %}" alt="Product Image" height="40px" width="40px" class="product-img" /></td>
+          <td>💲{{p.price}}</td>
+          <td>{{p.description}}</td>
+          <td>
+            <a class="btn btn-primary btn-xs" href="{% url 'update-product' p.id %}"><span class="glyphicon glyphicon-edit"></span></a>
+            <a class="btn btn-danger btn-xs" href="{% url 'delete-product' p.id %}"><span class="glyphicon glyphicon-trash"></span></a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" class="no-products">
+            🧁 No Products Found! 🍰<br>
+            <small>Click the + button below to add some sweetness!</small>
+          </td>
+        </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<!-- add product floating button -->
+<a href="/admin-add-product" class="float">
+  <i class="fas fa-plus my-float"></i>
+</a>
+
+{% endblock content %}

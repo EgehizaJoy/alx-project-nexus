@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Message Sent! ✨ | E-commerce</title>
+  <style media="screen">
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
+    
+    body {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      font-family: 'Baloo 2', cursive;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .success-container {
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .success-card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(162, 210, 255, 0.3);
+      border: 3px solid #a2d2ff;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .success-card:before {
+      content: "✉️📬💌";
+      position: absolute;
+      font-size: 3em;
+      opacity: 0.1;
+      right: 20px;
+      top: 10px;
+    }
+    
+    .success-title {
+      color: #5a6d80;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .success-title:before {
+      content: "✅ ";
+    }
+    
+    .success-lead {
+      color: #5a6d80;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+    
+    .success-lead:before {
+      content: "⏳ ";
+    }
+    
+    .success-divider {
+      border-top: 2px dashed #a2d2ff;
+      margin: 25px auto;
+      width: 50%;
+    }
+    
+    .success-text {
+      color: #5a6d80;
+      font-size: 1.2em;
+      margin-bottom: 30px;
+    }
+    
+    .success-text:before {
+      content: "🔍 ";
+    }
+    
+    .home-btn {
+      background: linear-gradient(135deg, #a2d2ff 0%, #ffafcc 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-block;
+      margin-top: 20px;
+      box-shadow: 0 5px 15px rgba(162, 210, 255, 0.4);
+      font-weight: bold;
+      text-decoration: none;
+    }
+    
+    .home-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(255, 175, 204, 0.6);
+    }
+    
+    .home-btn:before {
+      content: "🏠 ";
+    }
+    
+    .confetti {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #ffafcc;
+      opacity: 0;
+      animation: confetti-fall 5s linear infinite;
+    }
+    
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  {% include "ecom/navbar.html" %}
+  
+  <div class="success-container">
+    <div class="success-card">
+      <h1 class="success-title">Your message sent successfully!</h1>
+      <p class="success-lead">We will respond to your feedback soon</p>
+      <div class="success-divider"></div>
+      <p class="success-text">Check other features of our website!</p>
+      <a class="home-btn" href="/" role="button">HOME</a>
+    </div>
+  </div>
+  
+  <div class="confetti" id="confetti-container"></div>
+  
+  {% include "ecom/footer.html" %}
+
+  <script>
+    // Create confetti effect
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.getElementById('confetti-container');
+      const colors = ['#ffafcc', '#a2d2ff', '#bde0fe', '#ffd6e0', '#cdb4db'];
+      
+      for (let i = 0; i < 50; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.animationDuration = 3 + Math.random() * 4 + 's';
+        piece.style.animationDelay = Math.random() * 2 + 's';
+        piece.style.width = (5 + Math.random() * 10) + 'px';
+        piece.style.height = (5 + Math.random() * 10) + 'px';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        container.appendChild(piece);
+      }
+    });
+  </script>
+</body>
+</html>
