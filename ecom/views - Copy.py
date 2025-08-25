@@ -259,40 +259,42 @@ def search_view(request):
     return render(request,'ecom/index.html',{'products':products,'word':word,'product_count_in_cart':product_count_in_cart})
 
 #adding to cart no redirect
+@require_POST
 def add_to_cart_ajax(request):
-    if request.method == 'POST':
-        product_id = request.POST.get('product_id')
-        quantity = int(request.POST.get('quantity', 1))
-        
-        # Get current cart data from cookie
-        cart_data = {}
-        if 'cart_data' in request.COOKIES:
-            try:
-                cart_data = json.loads(request.COOKIES['cart_data'])
-            except json.JSONDecodeError:
-                cart_data = {}
-        
-        # Update quantity for the product
-        if product_id in cart_data:
-            cart_data[product_id] += quantity
-        else:
-            cart_data[product_id] = quantity
-        
-        # Calculate total items in cart
-        total_items = sum(cart_data.values())
-        
-        response = JsonResponse({
-            'success': True, 
-            'message': 'Product added to cart successfully', 
-            'cart_count': total_items
-        })
-        
-        # Set the cookie with updated cart data
-        response.set_cookie('cart_data', json.dumps(cart_data), max_age=30*24*60*60)  # 30 days
-        
-        return response
-    
-    return JsonResponse({'success': False, 'message': 'Invalid request'})
+    product_id = request.POST.get("product_id")
+
+    if not product_id:
+        return JsonResponse({"success": False, "message": "No product ID provided"})
+
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return JsonResponse({"success": False, "message": "Product not found"})
+
+    # Load existing cart from cookie
+    cart_data = request.COOKIES.get('cart', '{}')
+    try:
+        cart = json.loads(cart_data)
+    except json.JSONDecodeError:
+        cart = {}
+
+    # Increment quantity if exists, else set to 1
+    cart[product_id] = cart.get(product_id, 0) + 1
+
+    # Count total items (sum of quantities)
+    total_items = sum(cart.values())
+
+    response = JsonResponse({
+        "success": True,
+        "message": f"{product.name} added to cart!",
+        "cart_count": total_items
+    })
+
+    # Save updated cart in cookie
+    response.set_cookie('cart', json.dumps(cart))
+
+    return response
+
     
 # any one can add product to cart, no need of signin
 def add_to_cart_view(request,pk):
@@ -343,123 +345,62 @@ def product_detail(request, product_id):
     })
 
 # for checkout of cart
-# views.py (cart_view update)
 def cart_view(request):
-    # For cart counter - now counting total items including quantities
-    total_items = 0
-    cart_data = {}
-    
-    # Check for both old and new cookie formats
-    if 'cart_data' in request.COOKIES:
+    # Try to get cart from session first (more secure)
+    if 'cart' in request.session:
+        cart = request.session.get('cart', {})
+        cart_source = 'session'
+    else:
+        # Fall back to cookie if no session cart exists
+        cart_data = request.COOKIES.get('cart', '{}')
+        cart_signature = request.COOKIES.get('cart_signature', '')
+        cart_timestamp = request.COOKIES.get('cart_timestamp', '0')
+        # Verify the cart signature to detect tampering with timestamp check
+        if not verify_cart_signature(cart_data, cart_signature, cart_timestamp):
+            # Cart has been tampered with or is too old, reset it
+            cart_data = '{}'
+            print("Cart signature verification failed or cart expired!")
+             
         try:
-            cart_data = json.loads(request.COOKIES['cart_data'])
-            # Calculate total items in cart (sum of all quantities)
-            total_items = sum(int(qty) for qty in cart_data.values())
-        except (json.JSONDecodeError, ValueError):
-            cart_data = {}
-            total_items = 0
-    # Fallback to old format for backward compatibility
-    # elif 'product_ids' in request.COOKIES:
-    #   product_ids = request.COOKIES['product_ids']
-    #    if product_ids:
-            # Convert old format to new format
-    #       counter = product_ids.split('|')
-    #       for pid in counter:
-    #          cart_data[pid] = cart_data.get(pid, 0) + 1
-    #       total_items = len(counter)
-    
-    # Fetch product details from db whose id is present in cart_data
-    products = None
-    total = 0
-    cart_items = []
-    
-    if cart_data:
-        product_ids = list(cart_data.keys())
-        try:
-            products = models.Product.objects.filter(id__in=product_ids)
-           # products = models.Product.objects.filter(id__in=product_ids, active=True)
-           # Prepare cart items with product details and quantities
-            for p in products:
-                quantity = int(cart_data.get(str(p.id), 1))
-                item_total = p.price * quantity
-                total += item_total
-                cart_items.append({
-                    'product': p,
-                    'quantity': quantity,
-                    'item_total': item_total
-                })
-        except (ValueError, TypeError):
-            # Handle case where product IDs are invalid
-            cart_items = []
-            total = 0
-    
-    return render(request, 'ecom/cart.html', {
-        'cart_items': cart_items, 
-        'total': total,
-        'product_count_in_cart': total_items
-    })
-def update_cart_ajax(request):
-    if request.method == 'POST':
-        product_id = request.POST.get('product_id')
-        quantity = int(request.POST.get('quantity', 1))
-        
-        # Get current cart data from cookie
-        cart_data = {}
-        if 'cart_data' in request.COOKIES:
+            cart = json.loads(cart_data)
+        except json.JSONDecodeError:
+            cart = {}
+            
+        # Validate cart data structure
+        if not isinstance(cart, dict):
+            cart = {}    
+        if verify_cart_signature(cart_data, cart_signature, cart_timestamp):
             try:
-                cart_data = json.loads(request.COOKIES['cart_data'])
+                cart = json.loads(cart_data)
+                # Migrate cookie cart to session for future requests
+                request.session['cart'] = cart
+                cart_source = 'cookie_migrated'
             except json.JSONDecodeError:
-                cart_data = {}
-        
-        # Update quantity for the product
-        if quantity > 0:
-            cart_data[product_id] = quantity
+                cart = {}
+                cart_source = 'invalid'
         else:
-            # Remove product if quantity is 0
-            if product_id in cart_data:
-                del cart_data[product_id]
-        
-        # Calculate total items in cart
-        total_items = sum(cart_data.values())
-        
-        response = JsonResponse({
-            'success': True, 
-            'cart_count': total_items,
-            'message': 'Cart updated successfully'
-        })
-        
-        # Set updated cart data in cookie
-        response.set_cookie('cart_data', json.dumps(cart_data), max_age=30*24*60*60)
-        return response
+            cart = {}
+            cart_source = 'invalid'
     
-    return JsonResponse({'success': False, 'message': 'Invalid request'})
+    # Rest of your processing logic...
     
-def toggle_wishlist_ajax(request):
-    if request.method == 'POST':
-        product_id = request.POST.get('product_id')
-        
-        # Get current wishlist from cookie or session
-        wishlist = request.session.get('wishlist', [])
-        
-        if product_id in wishlist:
-            # Remove from wishlist
-            wishlist.remove(product_id)
-            added = False
-        else:
-            # Add to wishlist
-            wishlist.append(product_id)
-            added = True
-        
-        # Save wishlist in session
-        request.session['wishlist'] = wishlist
-        
-        return JsonResponse({
-            'success': True, 
-            'added': added,
-            'message': 'Wishlist updated successfully'
-        })
+    # Always store in session for authenticated users
+    if request.user.is_authenticated:
+        request.session['cart'] = validated_cart
+        # Clear cookie since we're using session now
+        response.delete_cookie('cart')
+        response.delete_cookie('cart_signature')
+        response.delete_cookie('cart_timestamp')
+    else:
+        # For anonymous users, update cookie
+        cart_json = json.dumps(validated_cart)
+        signature, timestamp = create_cart_signature(cart_json)
+        response.set_cookie('cart', cart_json, max_age=30*24*60*60, httponly=True, samesite='Strict')
+        response.set_cookie('cart_signature', signature, max_age=30*24*60*60, httponly=True, samesite='Strict')
+        response.set_cookie('cart_timestamp', timestamp, max_age=30*24*60*60, httponly=True, samesite='Strict')
     
-    return JsonResponse({'success': False, 'message': 'Invalid request'})    
+    return response
+    
 
 # Add these utility functions at the top of views.py
 def create_cart_signature(cart_data):
@@ -490,72 +431,27 @@ def verify_cart_signature(cart_data, signature, timestamp, max_age=3600):
     return hmac.compare_digest(expected_signature, signature)
 
 #remove items from cart
-import logging
-logger = logging.getLogger(__name__)
 def remove_from_cart_view(request, pk):
-    logger.debug(f"Attempting to remove product {pk} from cart")
-    logger.debug(f"Current cart data: {request.COOKIES.get('cart_data')}")
-    # Use the same cookie key as your other views
-    cart_data_str = request.COOKIES.get('cart_data', '{}')
-    
+    # Get cart data from cookie
+    cart_data = request.COOKIES.get('cart', '{}')
     try:
-        cart_data = json.loads(cart_data_str)
+        cart = json.loads(cart_data)
     except json.JSONDecodeError:
-        cart_data = {}
+        cart = {}
     
     # Remove the product from cart
     product_id = str(pk)
-    product_was_in_cart = product_id in cart_data
-    
-    if product_was_in_cart:
-        del cart_data[product_id]
-        message = "Product removed from cart successfully!"
+    if product_id in cart:
+        del cart[product_id]
+        messages.success(request, "Product removed from cart successfully!")
     else:
-        message = "Product not found in cart!"
+        messages.error(request, "Product not found in cart!")
     
-    # For AJAX requests (from your cart.html)
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        # Calculate updated cart total
-        total = 0
-        cart_count = 0
-        
-        # Only calculate if we have items
-        if cart_data:
-            product_ids = list(cart_data.keys())
-            products = models.Product.objects.filter(id__in=product_ids, active=True)
-            
-            for p in products:
-                quantity = int(cart_data.get(str(p.id), 0))
-                total += p.price * quantity
-                cart_count += quantity
-        
-        response = JsonResponse({
-            'success': product_was_in_cart,
-            'cart_total': total,
-            'cart_count': cart_count,
-            'message': message
-        })
-    else:
-        # For non-AJAX requests
-        if product_was_in_cart:
-            messages.success(request, message)
-        else:
-            messages.error(request, message)
-        
-        response = HttpResponseRedirect(reverse('cart'))
-    
-    # Set the updated cart data in cookie with proper settings
-    response.set_cookie(
-        'cart_data', 
-        json.dumps(cart_data), 
-        max_age=30*24*60*60,  # 30 days
-        httponly=True,
-        samesite='Lax'
-    )
-    
+    # Create response
+    response = HttpResponseRedirect(reverse('cart'))
+    response.set_cookie('cart', json.dumps(cart))
     return response
 
- 
 #increase cart items# views.py
 def increase_cart_item_view(request, pk):
     # Get cart data from cookie
@@ -626,49 +522,50 @@ def customer_home_view(request):
 
 # shipment address before placing order
 @login_required(login_url='customerlogin')
-@login_required(login_url='customerlogin')
 def customer_address_view(request):
-    # Check for products in cart using the new format
-    product_in_cart = False
-    product_count_in_cart = 0
-    total = 0
-    
-    # Check for new cookie format first
-    if 'cart_data' in request.COOKIES:
-        try:
-            cart_data = json.loads(request.COOKIES['cart_data'])
-            if cart_data:  # If cart is not empty
-                product_in_cart = True
-                product_count_in_cart = len(cart_data)  # Number of distinct products
-                
-                # Calculate total price for payment page
-                product_ids = list(cart_data.keys())
-                products = models.Product.objects.filter(id__in=product_ids)
-                for p in products:
-                    quantity = int(cart_data.get(str(p.id), 1))
-                    total += p.price * quantity
-        except json.JSONDecodeError:
-            pass
+    # this is for checking whether product is present in cart or not
+    # if there is no product in cart we will not show address form
+    product_in_cart=False
+    if 'product_ids' in request.COOKIES:
+        product_ids = request.COOKIES['product_ids']
+        if product_ids != "":
+            product_in_cart=True
+    #for counter in cart
+    if 'product_ids' in request.COOKIES:
+        product_ids = request.COOKIES['product_ids']
+        counter=product_ids.split('|')
+        product_count_in_cart=len(set(counter))
+    else:
+        product_count_in_cart=0
 
     addressForm = forms.AddressForm()
     if request.method == 'POST':
         addressForm = forms.AddressForm(request.POST)
         if addressForm.is_valid():
+            # here we are taking address, email, mobile at time of order placement
+            # we are not taking it from customer account table because
+            # these thing can be changes
             email = addressForm.cleaned_data['Email']
-            mobile = addressForm.cleaned_data['Mobile']
+            mobile=addressForm.cleaned_data['Mobile']
             address = addressForm.cleaned_data['Address']
-            
-            response = render(request, 'ecom/payment.html', {'total': total})
-            response.set_cookie('email', email)
-            response.set_cookie('mobile', mobile)
-            response.set_cookie('address', address)
+            #for showing total price on payment page.....accessing id from cookies then fetching  price of product from db
+            total=0
+            if 'product_ids' in request.COOKIES:
+                product_ids = request.COOKIES['product_ids']
+                if product_ids != "":
+                    product_id_in_cart=product_ids.split('|')
+                    products=models.Product.objects.all().filter(id__in = product_id_in_cart)
+                    for p in products:
+                        total=total+p.price
+
+            response = render(request, 'ecom/payment.html',{'total':total})
+            response.set_cookie('email',email)
+            response.set_cookie('mobile',mobile)
+            response.set_cookie('address',address)
             return response
-            
-    return render(request, 'ecom/customer_address.html', {
-        'addressForm': addressForm,
-        'product_in_cart': product_in_cart,
-        'product_count_in_cart': product_count_in_cart
-    })
+    return render(request,'ecom/customer_address.html',{'addressForm':addressForm,'product_in_cart':product_in_cart,'product_count_in_cart':product_count_in_cart})
+
+
 
 
 # here we are just directing to this view...actually we have to check whther payment is successful or not

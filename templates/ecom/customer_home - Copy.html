@@ -251,14 +251,10 @@
       font-size: 14px;
     }
   }
-    @keyframes fa-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
 </style>
 
 <div class="banner">
-  
+ 
 </div>
 
 <div class="products-header">
@@ -267,17 +263,17 @@
 </div>
 
 <div class="filter-section">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="popular">Popular</button>
-  <button class="filter-btn" data-filter="new">New Arrivals</button>
-  <button class="filter-btn" data-filter="sale">On Sale</button>
+  <button class="filter-btn active">All</button>
+  <button class="filter-btn">Popular</button>
+  <button class="filter-btn">New Arrivals</button>
+  <button class="filter-btn">On Sale</button>
 </div>
 
 {% if products %}
   <div class="products-grid">
     {% for p in products %}
-      <div class="product-card" data-category="all {% if p.is_new %}new{% endif %} {% if p.on_sale %}sale{% endif %}">
-        <span class="wishlist-icon" data-id="{{ p.id }}" aria-label="Add to wishlist">♡</span>
+      <div class="product-card">
+        <span class="wishlist-icon" data-id="{{ p.id }}">♡</span>
         
         <a href="{% url 'product_detail' p.id %}" class="product-link">
           <img src="{% static p.product_image.url %}" alt="{{ p.name }}">
@@ -285,35 +281,20 @@
           <div class="product-description">{{ p.description }}</div>
         </a>
         
-        {% if p.rating %}
         <div class="product-rating">
-          {% with ''|center:p.rating as range %}
-            {% for _ in range %}★{% endfor %}
-          {% endwith %}
-          {% if p.rating < 5 %}
-            {% with ""|center:p.remaining_rating as range %}
-              {% for _ in range %}☆{% endfor %}
-            {% endwith %}
-          {% endif %}
-          <span style="color:#777; font-size:12px; margin-left:5px;">({{ p.review_count }})</span>
+          ★★★★☆ <span style="color:#777; font-size:12px; margin-left:5px;">(24)</span>
         </div>
-        {% endif %}
         
-        <div class="product-price">
-          {% if p.on_sale %}
-            <span style="text-decoration: line-through; color: #999; margin-right: 8px;">${{ p.original_price }}</span>
-          {% endif %}
-          ${{ p.price }}
-        </div>
+        <div class="product-price">${{ p.price }}</div>
         
         <div class="add-to-cart-container">
           <div class="quantity-selector">
-            <button class="quantity-btn minus" data-id="{{ p.id }}" aria-label="Decrease quantity">-</button>
-            <input type="text" class="quantity-input" data-id="{{ p.id }}" value="1" readonly aria-label="Quantity">
-            <button class="quantity-btn plus" data-id="{{ p.id }}" aria-label="Increase quantity">+</button>
+            <button class="quantity-btn minus" data-id="{{ p.id }}">-</button>
+            <input type="text" class="quantity-input" data-id="{{ p.id }}" value="1" readonly>
+            <button class="quantity-btn plus" data-id="{{ p.id }}">+</button>
           </div>
           
-          <button class="add-to-cart-btn" data-id="{{ p.id }}" aria-label="Add to cart">
+          <button class="add-to-cart-btn" data-id="{{ p.id }}">
             <i class="fa fa-shopping-cart"></i> Add
           </button>
         </div>
@@ -328,7 +309,7 @@
   </div>
 {% endif %}
 
-<div class="cart-notification" id="cartNotification" role="alert" aria-live="polite"></div>
+<div class="cart-notification" id="cartNotification"></div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -351,47 +332,15 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
     
-    // Wishlist functionality with AJAX
+    // Wishlist functionality
     document.querySelectorAll(".wishlist-icon").forEach(function(icon) {
         icon.addEventListener("click", function() {
-            const wasActive = this.classList.contains("active");
             this.classList.toggle("active");
             this.textContent = this.classList.contains("active") ? "♥" : "♡";
-            this.setAttribute('aria-label', this.classList.contains("active") ? 
-                'Remove from wishlist' : 'Add to wishlist');
             
+            // In a real implementation, you would make an AJAX call to update the wishlist
             const productId = this.getAttribute('data-id');
-            
-            // Make AJAX call to update wishlist
-            fetch("{% url 'toggle-wishlist-ajax' %}", {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: `product_id=${productId}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    // Revert UI if failed
-                    this.classList.toggle("active");
-                    this.textContent = this.classList.contains("active") ? "♥" : "♡";
-                    showNotification("Failed to update wishlist", 'error');
-                } else {
-                    showNotification(
-                        wasActive ? "Removed from wishlist" : "Added to wishlist", 
-                        'success'
-                    );
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Revert UI on error
-                this.classList.toggle("active");
-                this.textContent = this.classList.contains("active") ? "♥" : "♡";
-                showNotification("Failed to update wishlist", 'error');
-            });
+            console.log("Wishlist toggle for product:", productId);
         });
     });
     
@@ -402,10 +351,8 @@ document.addEventListener("DOMContentLoaded", function() {
             const quantity = document.querySelector(`.quantity-input[data-id="${productId}"]`).value;
             
             // Show loading state
-            const originalHtml = this.innerHTML;
             this.classList.add('loading');
             this.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Adding...';
-            this.disabled = true;
             
             fetch("{% url 'add-to-cart-ajax' %}", {
                 method: "POST",
@@ -440,36 +387,17 @@ document.addEventListener("DOMContentLoaded", function() {
             .finally(() => {
                 // Reset button state
                 this.classList.remove('loading');
-                this.innerHTML = originalHtml;
-                this.disabled = false;
+                this.innerHTML = '<i class="fa fa-shopping-cart"></i> Add';
             });
         });
     });
     
-    // Filter buttons with actual filtering
+    // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
-            const filter = this.getAttribute('data-filter');
-            const productCards = document.querySelectorAll('.product-card');
-            
-            productCards.forEach(card => {
-                if (filter === 'all') {
-                    card.style.display = 'flex';
-                } else {
-                    if (card.getAttribute('data-category').includes(filter)) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                }
-            });
-            
-            // Update product count
-            const visibleProducts = document.querySelectorAll('.product-card[style="display: flex"]').length;
-            document.querySelector('.product-count').textContent = `${visibleProducts} product(s)`;
+            // In a real implementation, you would filter products here
         });
     });
     
@@ -485,65 +413,10 @@ document.addEventListener("DOMContentLoaded", function() {
         
         notification.classList.add('show');
         
-        // Announce to screen readers
-        notification.setAttribute('aria-live', 'assertive');
-        
         setTimeout(() => {
             notification.classList.remove('show');
-            notification.setAttribute('aria-live', 'polite');
         }, 3000);
     }
-});
-
-// In customer_home.html, update the add to cart AJAX call
-document.querySelectorAll(".add-to-cart-btn").forEach(function(button) {
-    button.addEventListener("click", function() {
-        const productId = this.getAttribute('data-id');
-        const quantity = document.querySelector(`.quantity-input[data-id="${productId}"]`).value;
-        
-        // Show loading state
-        const originalHtml = this.innerHTML;
-        this.classList.add('loading');
-        this.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Adding...';
-        this.disabled = true;
-        
-        fetch("{% url 'add-to-cart-ajax' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `product_id=${productId}&quantity=${quantity}`
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Network error');
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                // Update cart count in the header
-                const cartCountElements = document.querySelectorAll('.item-number');
-                cartCountElements.forEach(el => {
-                    el.textContent = data.cart_count;
-                });
-                
-                // Show success notification
-                showNotification(data.message, 'success');
-            } else {
-                showNotification("Error: " + data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification("Failed to add to cart. Please try again.", 'error');
-        })
-        .finally(() => {
-            // Reset button state
-            this.classList.remove('loading');
-            this.innerHTML = originalHtml;
-            this.disabled = false;
-        });
-    });
 });
 </script>
 

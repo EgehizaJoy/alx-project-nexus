@@ -55,8 +55,6 @@ urlpatterns = [
 
     path('add-to-cart/<int:pk>', views.add_to_cart_view,name='add-to-cart'),
     path("add-to-cart-ajax/", views.add_to_cart_ajax, name="add-to-cart-ajax"),
-    path('update-cart-ajax/', views.update_cart_ajax, name='update-cart-ajax'),
-    path('toggle-wishlist-ajax/', views.toggle_wishlist_ajax, name='toggle-wishlist-ajax'),
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),
     path('cart', views.cart_view,name='cart'),
     path('increase-cart-item/<int:pk>/', views.increase_cart_item_view, name='increase-cart-item'),

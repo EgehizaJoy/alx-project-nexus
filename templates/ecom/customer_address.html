@@ -4,132 +4,174 @@
 {% block content %}
 
 <style type="text/css">
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
-  
   body {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
-    font-family: 'Baloo 2', cursive;
+    background: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
   .address-container {
     max-width: 500px;
-    margin: 30px auto;
+    margin: 40px auto;
     padding: 0 20px;
   }
   
   .address-form {
     background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(162, 210, 255, 0.3);
-    border: 3px solid #c1e3ff;
-    position: relative;
-    overflow: hidden;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e1e8ed;
+  }
+  
+  .form-header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+  }
+  
+  .form-header h2 {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .form-header p {
+    color: #7f8c8d;
+    font-size: 16px;
   }
   
   .form-group {
     margin-bottom: 25px;
-    position: relative;
   }
   
   .form-group label {
     display: block;
-    margin-bottom: 10px;
-    color: #5a6d80;
-    font-weight: bold;
-    font-size: 1.1em;
-  }
-  
-  .form-group label:before {
-    content: "🔹 ";
-    color: #4d8bea;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 15px;
   }
   
   .form-group label span.required {
-    color: #ff6b6b;
+    color: #e74c3c;
   }
   
   .form-input {
     width: 100%;
-    padding: 15px;
-    border: 2px solid #c1e3ff;
-    border-radius: 15px;
-    font-size: 1em;
-    background: rgba(255, 255, 255, 0.8);
+    padding: 14px 16px;
+    border: 1px solid #dce1e6;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #fff;
+    transition: all 0.2s ease;
+    color: #2c3e50;
   }
   
   .form-input:focus {
     outline: none;
-    border-color: #a2d2ff;
-    box-shadow: 0 0 0 3px rgba(162, 210, 255, 0.2);
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
   }
   
   .form-input::placeholder {
-    color: #a2d2ff;
+    color: #a0aec0;
   }
   
   .submit-btn {
-    background: linear-gradient(135deg, #a2d2ff 0%, #bde0fe 100%);
+    background: #3498db;
     color: white;
     border: none;
-    padding: 15px 30px;
-    font-size: 1.2em;
-    border-radius: 50px;
+    padding: 14px 28px;
+    font-size: 16px;
+    border-radius: 8px;
     cursor: pointer;
     display: block;
-    margin: 40px auto 0;
-    box-shadow: 0 5px 15px rgba(162, 210, 255, 0.4);
-    font-weight: bold;
+    margin: 30px auto 0;
+    font-weight: 500;
     width: 100%;
-    max-width: 300px;
+    transition: all 0.2s ease;
   }
   
-  .submit-btn:before {
-    content: "💳 ";
+  .submit-btn:hover {
+    background: #2980b9;
+    transform: translateY(-1px);
   }
   
   .empty-cart {
     text-align: center;
-    padding: 50px;
-    color: #4d8bea;
-    font-size: 2em;
-    margin-top: 50px;
+    padding: 60px 30px;
+    color: #7f8c8d;
   }
   
-  .empty-cart:before {
-    content: "🛒";
-    font-size: 3em;
-    display: block;
+  .empty-cart-icon {
+    font-size: 60px;
+    color: #bdc3c7;
     margin-bottom: 20px;
+  }
+  
+  .empty-cart h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+  
+  .empty-cart p {
+    margin-bottom: 25px;
+    font-size: 16px;
+  }
+  
+  .back-to-cart {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #ecf0f1;
+    color: #7f8c8d;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+  
+  .back-to-cart:hover {
+    background: #dfe6e9;
+    color: #2c3e50;
   }
 </style>
 
 {%if product_in_cart%}
 <div class="address-container">
+  <div class="form-header">
+    <h2>Shipping Information</h2>
+    <p>Please provide your contact and shipping details</p>
+  </div>
+  
   <form method="post" class="address-form">
     {% csrf_token %}
     <div class="form-group">
-      <label>Email <span class="required">*</span></label>
-      {% render_field addressForm.Email class="form-input" placeholder="📧 Your Email" %}
+      <label>Email Address <span class="required">*</span></label>
+      {% render_field addressForm.Email class="form-input" placeholder="Enter your email address" %}
     </div>
     
     <div class="form-group">
-      <label>Mobile <span class="required">*</span></label>
-      {% render_field addressForm.Mobile class="form-input" placeholder="📱 Phone Number" %}
+      <label>Mobile Number <span class="required">*</span></label>
+      {% render_field addressForm.Mobile class="form-input" placeholder="Enter your phone number" %}
     </div>
     
     <div class="form-group">
-      <label>Shipment Address <span class="required">*</span></label>
-      {% render_field addressForm.Address class="form-input" placeholder="🏡 Building, Street, City, ZIP" rows="3" %}
+      <label>Shipping Address <span class="required">*</span></label>
+      {% render_field addressForm.Address class="form-input" placeholder="Enter your complete shipping address" rows="3" %}
     </div>
     
-    <input type="submit" value="Proceed To Pay" class="submit-btn">
+    <button type="submit" class="submit-btn">Proceed to Payment</button>
   </form>
 </div>
 {%else%}
-<div class="empty-cart">
-  Your cart is empty!<br>
-  <small>Add some products first 🛍️</small>
+<div class="address-container">
+  <div class="empty-cart">
+    <div class="empty-cart-icon">
+      <i class="fas fa-shopping-cart"></i>
+    </div>
+    <h3>Your cart is empty</h3>
+    <p>Add some products to your cart before proceeding to checkout</p>
+    <a href="{% url 'customer-home' %}" class="back-to-cart">Continue Shopping</a>
+  </div>
 </div>
 {%endif%}
 

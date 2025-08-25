@@ -35,6 +35,70 @@
             border: 1px solid #c1e3ff;
         }
         
+        .payment-methods {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(162, 210, 255, 0.2);
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid #c1e3ff;
+        }
+        
+        .payment-methods-header {
+            background: linear-gradient(45deg, #a1c4fd, #b5deff);
+            color: white;
+            padding: 20px;
+        }
+        
+        .payment-methods-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        
+        .payment-methods-body {
+            padding: 30px;
+        }
+        
+        .payment-option {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 2px solid #e6f7ff;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .payment-option:hover {
+            border-color: #c1e3ff;
+            background-color: #f8fbff;
+        }
+        
+        .payment-option.selected {
+            border-color: #4a8fe7;
+            background-color: #f0f8ff;
+        }
+        
+        .payment-option label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #4a5a7a;
+        }
+        
+        .payment-option input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .payment-option-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+            color: #4a8fe7;
+        }
+        
         .payment-container {
             background: white;
             border-radius: 15px;
@@ -42,6 +106,11 @@
             overflow: hidden;
             margin-bottom: 30px;
             border: 1px solid #c1e3ff;
+            display: none;
+        }
+        
+        .payment-container.active {
+            display: block;
         }
         
         .payment-header {
@@ -217,7 +286,40 @@
         <i class="fas fa-info-circle"></i> This is a demonstration payment interface
     </div>
     
-    <div class="payment-container">
+    <div class="payment-methods">
+        <div class="payment-methods-header">
+            <h3 class="payment-methods-title">
+                Select Payment Method
+            </h3>
+        </div>
+        <div class="payment-methods-body">
+            <div class="payment-option">
+                <label>
+                    <input type="radio" name="paymentMethod" value="lipa_na" />
+                    <span class="payment-option-icon"><i class="fas fa-mobile-alt"></i></span>
+                    Lipa Na (M-Pesa)
+                </label>
+            </div>
+            
+            <div class="payment-option">
+                <label>
+                    <input type="radio" name="paymentMethod" value="pay_on_delivery" />
+                    <span class="payment-option-icon"><i class="fas fa-truck"></i></span>
+                    Pay on Delivery
+                </label>
+            </div>
+            
+            <div class="payment-option">
+                <label>
+                    <input type="radio" name="paymentMethod" value="card" />
+                    <span class="payment-option-icon"><i class="fas fa-credit-card"></i></span>
+                    Credit/Debit Card
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <div class="payment-container" id="cardPaymentForm">
         <div class="payment-header">
             <h3 class="payment-title">
                 Payment Details
@@ -281,7 +383,24 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Simplified JavaScript - removed all animations and emoji effects
+        const paymentOptions = document.querySelectorAll('input[name="paymentMethod"]');
+        const cardPaymentForm = document.getElementById('cardPaymentForm');
+        const paymentOptionDivs = document.querySelectorAll('.payment-option');
+        
+        paymentOptions.forEach((option, index) => {
+            option.addEventListener('change', function() {
+                // Show/hide card form based on selection
+                if (this.value === 'card') {
+                    cardPaymentForm.classList.add('active');
+                } else {
+                    cardPaymentForm.classList.remove('active');
+                }
+                
+                // Add selected class to the chosen option
+                paymentOptionDivs.forEach(div => div.classList.remove('selected'));
+                paymentOptionDivs[index].classList.add('selected');
+            });
+        });
     });
 </script>
 

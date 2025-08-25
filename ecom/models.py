@@ -30,9 +30,28 @@ class Product(models.Model):
     # description=models.CharField(max_length=40)
     description = models.TextField()  # ✅ allows long text
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Other')
+    # Add these new fields for inventory management
+    is_available = models.BooleanField(default=True, verbose_name="Available for purchase")
+    stock_count = models.PositiveIntegerField(default=0, verbose_name="Quantity in stock")
+    low_stock_threshold = models.PositiveIntegerField(
+        default=10, 
+        verbose_name="Low stock alert threshold"
+    )
+     # You might also want to add these fields
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name
 
+    @property
+    def is_low_stock(self):
+        """Check if product is running low on stock"""
+        return self.stock_count <= self.low_stock_threshold
+    
+    @property
+    def is_out_of_stock(self):
+        """Check if product is out of stock"""
+        return self.stock_count == 0
 
 class Orders(models.Model):
     STATUS =(
