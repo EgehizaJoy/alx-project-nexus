@@ -114,20 +114,12 @@ $ python3 manage.py runserver
 
 ## Screenshots
 
-![Home Page](gitimg/2.PNG)
-![Products Page](gitimg/3.PNG)
-![cart Page](gitimg/4.PNG)
-![Address Page](gitimg/5.PNG)
-![Payment Page](gitimg/6.PNG)
-![Admin Page](gitimg/7.PNG)
+![Home Page](gitimg/2.JPG)
+![Products Page](gitimg/3.JPG)
+![cart Page](gitimg/4.JPG)
+![Address Page](gitimg/5.JPG)
+![Payment Page](gitimg/6.JPG)
+![Admin Page](gitimg/7.JPG)
 
 
-
-## Contributing
-
-Contributions are always welcome!
-
-See `contributing.md` for ways to get started.
-
-Please adhere to this project's `code of conduct`.
 
