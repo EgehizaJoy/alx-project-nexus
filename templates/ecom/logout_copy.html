@@ -1,0 +1,208 @@
+{% extends 'ecom/homebase.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  :root {
+    --pastel-blue: #d0e8ff;
+    --soft-blue: #bbd0ff;
+    --light-blue: #e6f2ff;
+    --text-blue: #5a86c5;
+  }
+  
+  body {
+    background: linear-gradient(135deg, var(--pastel-blue), #bbd0ff);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+  }
+  
+  .logout-container {
+    position: relative;
+    z-index: 1;
+    background: rgba(230, 242, 255, 0.85); /* Soft pastel blue background */
+    border-radius: 30px;
+    padding: 30px 25px;
+    text-align: center;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 90%;
+    border: 3px solid rgba(187, 208, 255, 0.3); /* Soft blue border */
+    overflow: hidden;
+  }
+  
+  .logout-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #d0e8ff, #bbd0ff); /* Soft gradient */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 8px 25px rgba(187, 208, 255, 0.4); /* Soft shadow */
+  }
+  
+  .logout-icon i {
+    font-size: 50px;
+    color: #5a86c5; /* Soft text blue */
+  }
+  
+  .logout-message {
+    color: var(--text-blue); /* Soft text blue */
+    font-weight: 800;
+    font-size: 2rem;
+    margin-bottom: 15px;
+    line-height: 1.3;
+  }
+  
+  .logout-text {
+    color: var(--text-blue); /* Soft text blue */
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 25px;
+    line-height: 1.6;
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .action-btn {
+    border: 0;
+    background: linear-gradient(45deg, #d0e8ff, #bbd0ff); /* Soft gradient */
+    color: #5a86c5; /* Soft text blue */
+    padding: 14px 35px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(187, 208, 255, 0.4); /* Soft shadow */
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .action-btn:hover {
+    background: linear-gradient(45deg, #bbd0ff, #d0e8ff); /* Softer gradient */
+    box-shadow: 0 4px 15px rgba(187, 208, 255, 0.5);
+  }
+  
+  .action-btn.secondary {
+    background: linear-gradient(45deg, #bbd0ff, #d0e8ff); /* Alternate gradient */
+  }
+  
+  .action-btn i {
+    font-size: 1.1rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .logout-container {
+      padding: 25px 20px;
+    }
+    
+    .logout-message {
+      font-size: 1.8rem;
+    }
+    
+    .logout-icon {
+      width: 100px;
+      height: 100px;
+    }
+    
+    .logout-icon i {
+      font-size: 40px;
+    }
+    
+    .action-buttons {
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .action-btn {
+      width: 100%;
+      max-width: 250px;
+      justify-content: center;
+      padding: 12px 25px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .logout-message {
+      font-size: 1.5rem;
+    }
+    
+    .logout-text {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    
+    .logout-icon {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 15px;
+    }
+    
+    .logout-icon i {
+      font-size: 35px;
+    }
+    
+    .action-btn {
+      font-size: 0.95rem;
+      padding: 10px 20px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .logout-container {
+      padding: 20px 15px;
+    }
+    
+    .logout-message {
+      font-size: 1.3rem;
+    }
+    
+    .logout-text {
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<div class="logout-container">
+  <div class="logout-icon">
+    <i class="fas fa-sign-out-alt"></i>
+  </div>
+  
+  <h1 class="logout-message">You've Successfully Logged Out! 👋</h1>
+  
+  <p class="logout-text">
+    We're sorry to see you go, but we'll be right here when you return!<br>
+    Your shopping cart will be waiting for you next time.
+  </p>
+  
+  <div class="action-buttons">
+    <a href="/" class="action-btn">
+      <i class="fas fa-home"></i> Back to Home
+    </a>
+    <a href="/customerlogin" class="action-btn secondary">
+      <i class="fas fa-sign-in-alt"></i> Login Again
+    </a>
+  </div>
+</div>
+
+{% endblock content %}

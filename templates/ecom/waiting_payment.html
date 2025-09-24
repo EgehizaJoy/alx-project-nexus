@@ -1,0 +1,17 @@
+<h2>Please complete payment on your phone...</h2>
+<p id="status">Waiting for confirmation...</p>
+
+<script>
+async function checkStatus() {
+    let res = await fetch("/payment/status/");
+    let data = await res.json();
+    if (data.status === "success") {
+        window.location.href = "/payment-success";
+    } else if (data.status === "failed") {
+        document.getElementById("status").innerText = "Payment failed or cancelled.";
+    } else {
+        setTimeout(checkStatus, 3000); // try again after 3s
+    }
+}
+checkStatus();
+</script>

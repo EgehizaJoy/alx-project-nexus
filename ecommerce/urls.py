@@ -1,11 +1,4 @@
-"""
 
-Developed By : naem azam
-facebook : fb.com/naemazamchowdhury
-Youtube :youtube.com/TheTerminalBoy
-
-
-"""
 from django.contrib import admin
 from django.urls import path
 from ecom import views
@@ -15,8 +8,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home_view,name=''),
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
-    #path('logout/', LogoutView.as_view(template_name='ecom/logout.html'), name='logout'),
     path('logout/', LogoutView.as_view(template_name='ecom/logout.html'), name='logout'),
+    #path('logout/', LogoutView.as_view(template_name='/'), name='logout'),
 
     path('aboutus', views.aboutus_view),
     path('contactus', views.contactus_view,name='contactus'),
@@ -67,5 +60,10 @@ urlpatterns = [
 
     path('test-logout-form/', TemplateView.as_view(template_name='ecom/test_logout.html')),
 
+    #path("initiate/<int:order_id>/", views.initiate_payment, name="mpesa_initiate"),
+    path("mpesa/initiate/", views.initiate_payment, name="mpesa_initiate"),
+    path("mpesa/callback/", views.mpesa_callback, name="mpesa_callback"),
+    # Add to urls.py
+    path('check-payment-status/', views.check_payment_status, name='check-payment-status'),
 
 ]

@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,reverse,get_object_or_404  
 from .context_processors import product_count_in_cart
 from . import forms,models
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect,HttpResponse
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group
@@ -14,7 +15,8 @@ import json
 import hashlib
 import hmac
 import time
-
+from django.http import JsonResponse
+from .mpesa import stk_push_request
 
 def home_view(request):
     products=models.Product.objects.all()
@@ -522,7 +524,9 @@ def remove_from_cart_view(request, pk):
         # Only calculate if we have items
         if cart_data:
             product_ids = list(cart_data.keys())
-            products = models.Product.objects.filter(id__in=product_ids, active=True)
+            products = models.Product.objects.filter(id__in=product_ids)
+           # product_ids = list(cart_data.keys())
+            #products = models.Product.objects.filter(id__in=product_ids, active=True)
             
             for p in products:
                 quantity = int(cart_data.get(str(p.id), 0))
@@ -626,7 +630,6 @@ def customer_home_view(request):
 
 # shipment address before placing order
 @login_required(login_url='customerlogin')
-@login_required(login_url='customerlogin')
 def customer_address_view(request):
     # Check for products in cart using the new format
     product_in_cart = False
@@ -651,7 +654,7 @@ def customer_address_view(request):
             pass
 
     addressForm = forms.AddressForm()
-    if request.method == 'POST':
+    if request.method == 'POST':    #this triggers when the submit button is clicked
         addressForm = forms.AddressForm(request.POST)
         if addressForm.is_valid():
             email = addressForm.cleaned_data['Email']
@@ -675,46 +678,45 @@ def customer_address_view(request):
 #then only this view should be accessed
 @login_required(login_url='customerlogin')
 def payment_success_view(request):
-    # Here we will place order | after successful payment
-    # we will fetch customer  mobile, address, Email
-    # we will fetch product id from cookies then respective details from db
-    # then we will create order objects and store in db
-    # after that we will delete cookies because after order placed...cart should be empty
-    customer=models.Customer.objects.get(user_id=request.user.id)
-    products=None
-    email=None
-    mobile=None
-    address=None
-    if 'product_ids' in request.COOKIES:
-        product_ids = request.COOKIES['product_ids']
-        if product_ids != "":
-            product_id_in_cart=product_ids.split('|')
-            products=models.Product.objects.all().filter(id__in = product_id_in_cart)
-            # Here we get products list that will be ordered by one customer at a time
+    customer = models.Customer.objects.get(user_id=request.user.id)
+    email = request.COOKIES.get('email')
+    mobile = request.COOKIES.get('mobile')
+    address = request.COOKIES.get('address')
 
-    # these things can be change so accessing at the time of order...
-    if 'email' in request.COOKIES:
-        email=request.COOKIES['email']
-    if 'mobile' in request.COOKIES:
-        mobile=request.COOKIES['mobile']
-    if 'address' in request.COOKIES:
-        address=request.COOKIES['address']
+    products = None
+    cart_data = {}
 
-    # here we are placing number of orders as much there is a products
-    # suppose if we have 5 items in cart and we place order....so 5 rows will be created in orders table
-    # there will be lot of redundant data in orders table...but its become more complicated if we normalize it
-    for product in products:
-        models.Orders.objects.get_or_create(customer=customer,product=product,status='Pending',email=email,mobile=mobile,address=address)
+    # ✅ Use new cart_data cookie instead of product_ids
+    if 'cart_data' in request.COOKIES:
+        try:
+            cart_data = json.loads(request.COOKIES['cart_data'])
+            if cart_data:
+                product_ids = list(cart_data.keys())
+                products = models.Product.objects.filter(id__in=product_ids)
+        except (json.JSONDecodeError, ValueError):
+            products = None
 
-    # after order placed cookies should be deleted
-    response = render(request,'ecom/payment_success.html')
-    response.delete_cookie('product_ids')
+    # ✅ Create orders based on cart_data quantities
+    if products:
+        for product in products:
+            quantity = int(cart_data.get(str(product.id), 1))
+            for _ in range(quantity):  # one row per item (like before)
+                models.Orders.objects.create(
+                    customer=customer,
+                    product=product,
+                    status='Pending',
+                    email=email,
+                    mobile=mobile,
+                    address=address
+                )
+
+    # ✅ Render success page and clear cookies
+    response = render(request, 'ecom/payment_success.html')
+    response.delete_cookie('cart_data')
     response.delete_cookie('email')
     response.delete_cookie('mobile')
     response.delete_cookie('address')
     return response
-
-
 
 
 @login_required(login_url='customerlogin')
@@ -837,3 +839,52 @@ def contactus_view(request):
             send_mail(str(name)+' || '+str(email),message, settings.EMAIL_HOST_USER, settings.EMAIL_RECEIVING_USER, fail_silently = False)
             return render(request, 'ecom/contactussuccess.html')
     return render(request, 'ecom/contactus.html', {'form':sub})
+
+def initiate_payment(request):
+    phone = request.GET.get("phone")
+    phone = normalize_phone(phone)
+    amount = request.GET.get("amount")
+
+    response = stk_push_request(phone, int(amount), "TEMP")
+    print("STK Response:", response)  # 👈 see server logs
+    return JsonResponse(response)
+
+def normalize_phone(phone: str) -> str:
+    phone = phone.strip()
+    if phone.startswith("0"):
+        phone = "254" + phone[1:]
+    elif phone.startswith("7"):
+        phone = "254" + phone
+    elif phone.startswith("+254"):
+        phone = phone[1:]  # remove the +
+    return phone
+    return JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted"})
+
+@csrf_exempt
+def mpesa_callback(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        result_code = data.get('Body', {}).get('stkCallback', {}).get('ResultCode')
+
+        response = JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted"})
+
+        if result_code == 0:
+            # ✅ set cookie flag (accessible to polling view)
+            response.set_cookie('payment_success', '1', max_age=300)  # 5 min expiry
+        else:
+            response.set_cookie('payment_success', '0', max_age=300)
+
+        return response
+    except Exception as e:
+        print(f"Error processing callback: {e}")
+        return JsonResponse({"ResultCode": 1, "ResultDesc": "Failed"})
+
+     
+def check_payment_status(request):
+    if request.COOKIES.get('payment_success') == '1':
+        return JsonResponse({'status': 'completed'})
+    elif request.COOKIES.get('payment_success') == '0':
+        return JsonResponse({'status': 'failed'})
+    else:
+        return JsonResponse({'status': 'pending'})
+        

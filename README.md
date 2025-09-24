@@ -14,7 +14,7 @@ Moving towards the order management section, the system forwards each and every 
 
 Last but not least, a clean and simple dashboard is presented with various color combinations for a greater user experience while using this eCommerce Site Project in Python Django Framework. For its UI elements, a free open-source CSS framework; Bootstrap is on board with some Vanilla CSS too(codeastro.com). Presenting a new e-commerce website Project in Python Django which includes an admin panel with client-side interaction.
 
-[Watch Full Video]()
+
 
 ## Available Features:
 
@@ -26,7 +26,6 @@ Last but not least, a clean and simple dashboard is presented with various color
 - Simple Payment Structure
 - List Orders
 - Track Orders
-- Download Invoice (PDF)
 - View/Update Profile
 - Order Management
 - Product Management
@@ -115,10 +114,12 @@ $ python3 manage.py runserver
 
 ## Screenshots
 
-![Admin Page](gitimg/2.PNG)
-![Stuff Page](gitimg/3.PNG)
-![student Page](gitimg/4.PNG)
-![student Page](gitimg/5.PNG)
+![Home Page](gitimg/2.PNG)
+![Products Page](gitimg/3.PNG)
+![cart Page](gitimg/4.PNG)
+![Address Page](gitimg/5.PNG)
+![Payment Page](gitimg/6.PNG)
+![Admin Page](gitimg/7.PNG)
 
 
 
@@ -129,15 +130,4 @@ Contributions are always welcome!
 See `contributing.md` for ways to get started.
 
 Please adhere to this project's `code of conduct`.
-
-
-
-
-## Authors
-- [@naemazam](https://github.com/naemazam?tab=repositories)
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
 

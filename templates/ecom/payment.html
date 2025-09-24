@@ -280,7 +280,24 @@
         }
     </style>
 </head>
+<!--<div class="form-group">
+    <label for="mpesa-phone">M-Pesa Phone Number</label>
+    <input type="tel" id="mpesa-phone" class="form-control" placeholder="07XX XXX XXX" required>
+</div>
 
+<button id="mpesa-pay-btn" class="btn btn-primary" onclick="initiateMpesaPayment()">
+    Pay with M-Pesa
+</button>
+-->
+<div id="payment-status" style="display: none; margin-top: 20px;">
+    <div class="alert alert-info">
+        <p>Waiting for payment confirmation...</p>
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Please check your phone to complete the M-Pesa payment</p>
+    </div>
+</div>
 <div class="container">
     <div class="demo-notice">
         <i class="fas fa-info-circle"></i> This is a demonstration payment interface
@@ -376,9 +393,12 @@
         </li>
     </ul>
     
-    <a href="/payment-success" class="pay-button" role="button">
+   <!-- <a href="/payment-success" class="pay-button" role="button">
         <i class="fas fa-lock"></i> Complete Payment
-    </a>
+    </a>  -->
+    <button id="completePaymentBtn" class="pay-button">
+    <i class="fas fa-lock"></i> Complete Payment
+</button>
 </div>
 
 <script>
@@ -403,5 +423,94 @@
         });
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const completeBtn = document.getElementById('completePaymentBtn');
+    const paymentOptions = document.querySelectorAll('input[name="paymentMethod"]');
+    let selectedMethod = null;
+
+    paymentOptions.forEach(opt => {
+        opt.addEventListener('change', () => {
+            selectedMethod = opt.value;
+        });
+    });
+
+    completeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (selectedMethod === 'lipa_na') {
+            initiateMpesaPayment();
+        } else if (selectedMethod === 'pay_on_delivery') {
+            window.location.href = "{% url 'payment-success' %}";
+        } else if (selectedMethod === 'card') {
+            // handle card payment flow
+        } else {
+            alert("Please select a payment method.");
+        }
+    });
+
+    // ✅ Initiate M-Pesa STK push
+    function initiateMpesaPayment() {
+        const phone = getCookie("mobile");  // saved earlier in cookie
+        const amount = "{{ total }}";       // passed from Django context
+
+        document.getElementById('payment-status').style.display = 'block';
+        completeBtn.disabled = true;
+
+        fetch(`/mpesa/initiate/?phone=${phone}&amount=${amount}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ResponseCode === "0") {
+                    alert("STK Push sent to your phone. Enter your M-Pesa PIN to complete.");
+                    pollForPaymentCompletion();
+                } else {
+                    alert("Payment initiation failed: " + (data.errorMessage || data.ResponseDescription));
+                    document.getElementById('payment-status').style.display = 'none';
+                    completeBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while initiating payment.");
+                document.getElementById('payment-status').style.display = 'none';
+                completeBtn.disabled = false;
+            });
+    }
+
+    // ✅ Poll backend until payment is complete
+    function pollForPaymentCompletion() {
+        const maxAttempts = 30; // 5 minutes @ 10s interval
+        let attempts = 0;
+
+        const pollInterval = setInterval(() => {
+            fetch("{% url 'check-payment-status' %}")  // ✅ correct reverse
+                .then(response => response.json())
+                .then(data => {
+                    attempts++;
+                    if (data.status === 'completed') {
+                        window.location.href = "{% url 'payment-success' %}";
+                    }  else if (attempts >= maxAttempts) {
+                        clearInterval(pollInterval);
+                        alert("Payment timeout. Please check your phone.");
+                        document.getElementById('payment-status').style.display = 'none';
+                        completeBtn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Polling error:', error);
+                    clearInterval(pollInterval);
+                    document.getElementById('payment-status').style.display = 'none';
+                    completeBtn.disabled = false;
+                });
+        }, 10000); // check every 10 seconds
+    }
+
+    // ✅ helper to read cookie
+    function getCookie(name) {
+        let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        return match ? match[2] : null;
+    }
+});
+</script>
+
 
 {% endblock content %}
