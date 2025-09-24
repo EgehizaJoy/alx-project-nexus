@@ -65,10 +65,6 @@ For Windows
 ```
  python -m venv venv
 ```
-For Mac
-```
-python3 -m venv venv
-```
 
 Activate Virtual Environment
 
@@ -77,10 +73,6 @@ For Windows
 source venv/scripts/activate
 ```
 
-For Mac
-```
-source venv/bin/activate
-```
 
 **3. Install Requirements from 'requirements.txt'**
 ```
@@ -106,11 +98,7 @@ Command for Windows:
 ```python
 $ python manage.py runserver
 ```
-
-Command for Mac:
-```python
-$ python3 manage.py runserver
-```
+`
 
 ## Screenshots
 
